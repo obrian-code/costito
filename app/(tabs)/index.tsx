@@ -1,74 +1,85 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Steps } from "@/components/Steps";
+import { Final } from "@/screens/final";
+import { Formulario4 } from "@/screens/Formulario4";
+import { Formulario1 } from "@/screens/Formulario1";
+import { Formulario2 } from "@/screens/Formulario2";
+import { Formulario3 } from "@/screens/Formulario3";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  GestureHandlerRootView,
+  ScrollView,
+} from "react-native-gesture-handler";
+import { IGVSelector } from "@/screens/IGVSelector";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HomeScreen() {
+  const [isIGVSelected, setIsIGVSelected] = useState(false);
+
+  useEffect(() => {
+    const checkIGVSelection = async () => {
+      try {
+        const savedIGV = await AsyncStorage.getItem("selectedIGV");
+        if (savedIGV) {
+          setIsIGVSelected(true);
+        }
+        //const savedIGV = await AsyncStorage.clear();
+      } catch (error) {
+        console.error("Error al verificar la selección de IGV:", error);
+      }
+    };
+
+    checkIGVSelection();
+  }, []);
+  const steps = [
+    {
+      title: "Step 1",
+      content: (
+        <ScrollView style={{ flex: 1 }}>
+          <Formulario1 />
+        </ScrollView>
+      ),
+    },
+    {
+      title: "Step 2",
+      content: (
+        <ScrollView style={{ flex: 1 }}>
+          <Formulario2 />
+        </ScrollView>
+      ),
+    },
+    {
+      title: "Step 3",
+      content: (
+        <ScrollView style={{ flex: 1 }}>
+          <Formulario3 />
+        </ScrollView>
+      ),
+    },
+    {
+      title: "Step 4",
+      content: (
+        <ScrollView style={{ flex: 1 }}>
+          <Formulario4 />
+        </ScrollView>
+      ),
+    },
+    {
+      title: "Step 5",
+      content: (
+        <ScrollView style={{ flex: 1 }}>
+          <Final />
+        </ScrollView>
+      ),
+    },
+  ];
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <GestureHandlerRootView>
+      <SafeAreaView style={{ flex: 1 }}>
+        {isIGVSelected ? <Steps steps={steps} /> : <IGVSelector />}
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});

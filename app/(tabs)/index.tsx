@@ -13,6 +13,7 @@ import {
 import { IGVSelector } from "@/screens/IGVSelector";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Formulario0 } from "@/screens/Formulario0";
 
 export default function HomeScreen() {
   const [isIGVSelected, setIsIGVSelected] = useState(false);
@@ -37,7 +38,7 @@ export default function HomeScreen() {
       title: "Step 1",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Formulario1 />
+          <Formulario0 />
         </ScrollView>
       ),
     },
@@ -45,7 +46,7 @@ export default function HomeScreen() {
       title: "Step 2",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Formulario2 />
+          <Formulario1 />
         </ScrollView>
       ),
     },
@@ -53,7 +54,7 @@ export default function HomeScreen() {
       title: "Step 3",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Formulario3 />
+          <Formulario2 />
         </ScrollView>
       ),
     },
@@ -61,12 +62,20 @@ export default function HomeScreen() {
       title: "Step 4",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Formulario4 />
+          <Formulario3 />
         </ScrollView>
       ),
     },
     {
       title: "Step 5",
+      content: (
+        <ScrollView style={{ flex: 1 }}>
+          <Formulario4 />
+        </ScrollView>
+      ),
+    },
+    {
+      title: "Step 6",
       content: (
         <ScrollView style={{ flex: 1 }}>
           <Final />

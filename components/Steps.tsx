@@ -54,54 +54,67 @@ export function Steps({ steps }: StepsProps) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.stepIndicator}>
-        {steps.map((step, index) => (
-          <View key={index} style={styles.stepContainer}>
-            <TouchableOpacity
-              style={[
-                styles.stepCircle,
-                currentStep === index ? styles.activeStepCircle : {},
-                index < currentStep ? styles.completedStepCircle : {},
-              ]}
-            >
-              <Text
+    <>
+      <View style={styles.container}>
+        <View style={styles.stepIndicator}>
+          {steps.map((step, index) => (
+            <View key={index} style={styles.stepContainer}>
+              <TouchableOpacity
                 style={[
-                  styles.stepNumber,
-                  currentStep === index
-                    ? styles.stepNumberEnable
-                    : styles.stepNumberDisable,
+                  styles.stepCircle,
+                  currentStep === index ? styles.activeStepCircle : {},
+                  index < currentStep ? styles.completedStepCircle : {},
                 ]}
               >
-                {index + 1}
-              </Text>
-            </TouchableOpacity>
-            <Text style={styles.stepTitle}>{step.title}</Text>
-            {index < steps.length - 1 && (
-              <View
-                style={[
-                  styles.line,
-                  {
-                    backgroundColor: index < currentStep ? "#007BFF" : "#ccc",
-                  },
-                ]}
-              />
-            )}
-          </View>
-        ))}
+                <Text
+                  style={[
+                    styles.stepNumber,
+                    currentStep === index
+                      ? styles.stepNumberEnable
+                      : styles.stepNumberDisable,
+                  ]}
+                >
+                  {index + 1}
+                </Text>
+              </TouchableOpacity>
+              <Text style={styles.stepTitle}>{step.title}</Text>
+              {index < steps.length - 1 && (
+                <View
+                  style={[
+                    styles.line,
+                    {
+                      backgroundColor: index < currentStep ? "#007BFF" : "#ccc",
+                    },
+                  ]}
+                />
+              )}
+            </View>
+          ))}
+        </View>
+        {steps[currentStep].content}
       </View>
-      {steps[currentStep].content}
       {!keyboardVisible && (
         <View style={styles.buttons}>
-          {currentStep > 0 && <Button title="Previous" onPress={prevStep} />}
+          {currentStep > 0 && (
+            <TouchableOpacity style={styles.buttonPrev} onPress={prevStep}>
+              <Text style={styles.buttonPrevText}> Anterior</Text>
+            </TouchableOpacity>
+          )}
           {currentStep < steps.length - 1 ? (
-            <Button title="Next" onPress={nextStep} />
+            <TouchableOpacity style={styles.buttonNext} onPress={nextStep}>
+              <Text style={styles.buttonPrevNext}> Siguiente</Text>
+            </TouchableOpacity>
           ) : (
-            <Button title="Finish" onPress={() => alert("Finished!")} />
+            <TouchableOpacity
+              style={styles.buttonNext}
+              onPress={() => alert("Finished!")}
+            >
+              <Text style={styles.buttonPrevNext}>Finalizar</Text>
+            </TouchableOpacity>
           )}
         </View>
       )}
-    </View>
+    </>
   );
 }
 
@@ -160,8 +173,36 @@ const styles = StyleSheet.create({
     height: 2,
   },
   buttons: {
+    width: "100%",
+    padding: 20,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 5,
+
+    backgroundColor: "white",
+  },
+  buttonNext: {
+    width: "47%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    backgroundColor: "#25D360",
+  },
+  buttonPrevNext: {
+    color: "white",
+    fontSize: 15,
+  },
+  buttonPrev: {
+    width: "47%",
+    color: "white",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    backgroundColor: "#F0F0F4",
+  },
+  buttonPrevText: {
+    color: "black",
+    fontSize: 15,
   },
 });

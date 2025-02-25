@@ -3,7 +3,7 @@ import { Formulario3 } from "@/screens/Formulario3";
 import { Formulario4 } from "@/screens/Formulario4";
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Steps } from "../components/Steps";
+import { Steps } from "../../components/Steps";
 import { IGVSelector } from "@/screens/IGVSelector";
 import { Formulario2 } from "@/screens/Formulario2";
 import { Formulario1 } from "@/screens/Formulario1";
@@ -14,6 +14,7 @@ import {
   GestureHandlerRootView,
   ScrollView,
 } from "react-native-gesture-handler";
+import { Stack } from "expo-router";
 export function AddProductScreen() {
   const [isIGVSelected, setIsIGVSelected] = useState(false);
 
@@ -85,6 +86,7 @@ export function AddProductScreen() {
 
   return (
     <GestureHandlerRootView>
+      {/* <Stack.Screen options={{ title: "Registro Producto" }} /> */}
       <SafeAreaView style={{ flex: 1 }}>
         {isIGVSelected ? <Steps steps={steps} /> : <IGVSelector />}
       </SafeAreaView>

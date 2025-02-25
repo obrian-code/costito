@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 
 interface Campo {
   label: string;
@@ -33,7 +40,9 @@ export function FormularioGenerico({
           />
         </View>
       ))}
-      <Button title="Enviar" onPress={onSubmit} />
+      <TouchableOpacity style={styles.Submit} onPress={onSubmit}>
+        <Text style={styles.SubmitText}>Agregar</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -65,5 +74,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 8,
     borderRadius: 5,
+  },
+  Submit: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: 50,
+    borderColor: "#25D360",
+    borderWidth: 1,
+    paddingLeft: 8,
+    borderRadius: 5,
+  },
+  SubmitText: {
+    color: "green",
+    fontSize: 15,
   },
 });

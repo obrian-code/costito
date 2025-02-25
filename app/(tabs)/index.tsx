@@ -1,4 +1,3 @@
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   GestureHandlerRootView,
   ScrollView,
@@ -13,7 +12,7 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-import { Link, router, useNavigation } from "expo-router";
+import { Link } from "expo-router";
 import { useState } from "react";
 
 export default function HomeScreen() {
@@ -51,7 +50,7 @@ export default function HomeScreen() {
   const filterProducts = products.filter((product) =>
     product.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
   );
-  const navigation = useNavigation(); // Hook para navegació
+
   return (
     <GestureHandlerRootView>
       <View style={styles.container}>
@@ -109,14 +108,8 @@ export default function HomeScreen() {
             ))}
           </View>
         </ScrollView>
-        <TouchableOpacity
-          style={styles.floatingButton}
-          onPress={() => {
-            /*             router.replace("add_product"); */
-            console.log("Botón flotante presionado");
-          }}
-        >
-          <Link href="/add_product">
+        <TouchableOpacity style={styles.floatingButton}>
+          <Link replace href="/(product)/add">
             <Ionicons name="add" size={30} color="white" />
           </Link>
         </TouchableOpacity>

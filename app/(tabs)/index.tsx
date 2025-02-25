@@ -14,8 +14,10 @@ import {
 
 import { Ionicons } from "@expo/vector-icons";
 import { Link, router, useNavigation } from "expo-router";
+import { useState } from "react";
 
 export default function HomeScreen() {
+  const [search, setSearch] = useState("");
   const generateRandomProduct = (index) => {
     const names = [
       "Producto A",
@@ -44,7 +46,11 @@ export default function HomeScreen() {
     }
     return products;
   };
+
   const products = generateProducts();
+  const filterProducts = products.filter((product) =>
+    product.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  );
   const navigation = useNavigation(); // Hook para navegació
   return (
     <GestureHandlerRootView>
@@ -75,11 +81,13 @@ export default function HomeScreen() {
             style={styles.searchInput}
             placeholder="Buscar..."
             placeholderTextColor="gray"
+            value={search}
+            onChangeText={setSearch}
           />
         </View>
         <ScrollView>
           <View style={styles.contrainerProduct}>
-            {products.map((product) => (
+            {filterProducts.map((product) => (
               <TouchableOpacity
                 key={product.id}
                 style={styles.productCard}

@@ -1,94 +1,257 @@
-import { Steps } from "@/components/Steps";
-import { Final } from "@/screens/final";
-import { Formulario4 } from "@/screens/Formulario4";
-import { Formulario1 } from "@/screens/Formulario1";
-import { Formulario2 } from "@/screens/Formulario2";
-import { Formulario3 } from "@/screens/Formulario3";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   GestureHandlerRootView,
   ScrollView,
 } from "react-native-gesture-handler";
-import { IGVSelector } from "@/screens/IGVSelector";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Formulario0 } from "@/screens/Formulario0";
+
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from "react-native";
+
+import { Ionicons } from "@expo/vector-icons";
+import { Link, router, useNavigation } from "expo-router";
 
 export default function HomeScreen() {
-  const [isIGVSelected, setIsIGVSelected] = useState(false);
+  const generateRandomProduct = (index) => {
+    const names = [
+      "Producto A",
+      "Producto B",
+      "Producto C",
+      "Producto D",
+      "Producto E",
+    ];
+    const price = Math.floor(Math.random() * 100) + 1;
+    const igv = price * 0.18;
+    const cost = price - igv;
 
-  useEffect(() => {
-    const checkIGVSelection = async () => {
-      try {
-        const savedIGV = await AsyncStorage.getItem("selectedIGV");
-        if (savedIGV) {
-          setIsIGVSelected(true);
-        }
-        //const savedIGV = await AsyncStorage.clear();
-      } catch (error) {
-        console.error("Error al verificar la selección de IGV:", error);
-      }
+    return {
+      id: index,
+      name: names[index % names.length],
+      unitCost: cost.toFixed(2),
+      igv: igv.toFixed(2),
+      price: price.toFixed(2),
     };
+  };
 
-    checkIGVSelection();
-  }, []);
-  const steps = [
-    {
-      title: "Step 1",
-      content: (
-        <ScrollView style={{ flex: 1 }}>
-          <Formulario0 />
-        </ScrollView>
-      ),
-    },
-    {
-      title: "Step 2",
-      content: (
-        <ScrollView style={{ flex: 1 }}>
-          <Formulario1 />
-        </ScrollView>
-      ),
-    },
-    {
-      title: "Step 3",
-      content: (
-        <ScrollView style={{ flex: 1 }}>
-          <Formulario2 />
-        </ScrollView>
-      ),
-    },
-    {
-      title: "Step 4",
-      content: (
-        <ScrollView style={{ flex: 1 }}>
-          <Formulario3 />
-        </ScrollView>
-      ),
-    },
-    {
-      title: "Step 5",
-      content: (
-        <ScrollView style={{ flex: 1 }}>
-          <Formulario4 />
-        </ScrollView>
-      ),
-    },
-    {
-      title: "Step 6",
-      content: (
-        <ScrollView style={{ flex: 1 }}>
-          <Final />
-        </ScrollView>
-      ),
-    },
-  ];
-
+  const generateProducts = () => {
+    const products = [];
+    for (let i = 0; i < 20; i++) {
+      products.push(generateRandomProduct(i));
+    }
+    return products;
+  };
+  const products = generateProducts();
+  const navigation = useNavigation(); // Hook para navegació
   return (
     <GestureHandlerRootView>
-      <SafeAreaView style={{ flex: 1 }}>
-        {isIGVSelected ? <Steps steps={steps} /> : <IGVSelector />}
-      </SafeAreaView>
+      <View style={styles.container}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Costito</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => console.log("Botón flotante presionado")}
+        >
+          <Ionicons name="settings" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.View}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Productos</Text>
+          <Ionicons name="filter" size={18} color="black" />
+        </View>
+        <View style={styles.searchContainer}>
+          <Ionicons
+            name="search"
+            size={24}
+            color="gray"
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar..."
+            placeholderTextColor="gray"
+          />
+        </View>
+        <ScrollView>
+          <View style={styles.contrainerProduct}>
+            {products.map((product) => (
+              <TouchableOpacity
+                key={product.id}
+                style={styles.productCard}
+                onPress={() =>
+                  console.log("Botón flotante presionado", product.id)
+                }
+              >
+                <View style={styles.productDetails}>
+                  <Text style={styles.productName}>{product.name}</Text>
+                  <Text style={styles.productPrice}>
+                    Costo UNI: {product.unitCost}
+                  </Text>
+                  <Text style={styles.productPrice}>IGV: {product.igv}</Text>
+                  <Text style={styles.productPrice}>
+                    Precio: {product.price}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.floatingButton}
+          onPress={() => {
+            /*             router.replace("add_product"); */
+            console.log("Botón flotante presionado");
+          }}
+        >
+          <Link href="/add_product">
+            <Ionicons name="add" size={30} color="white" />
+          </Link>
+        </TouchableOpacity>
+      </View>
     </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    position: "relative",
+    display: "flex",
+    padding: 2,
+    width: "100%",
+    height: 150,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#25D360",
+  },
+  titleContainer: {
+    height: "70%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 10,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    color: "#fff",
+    fontWeight: "bold",
+    fontStyle: "italic",
+    marginRight: 5,
+  },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "70%",
+    paddingHorizontal: 10,
+  },
+  View: {
+    flex: 1,
+    width: "100%",
+    bottom: 0,
+    top: 110,
+    position: "absolute",
+    backgroundColor: "#F0F0F4",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingBottom: 15,
+  },
+  header: {
+    flexDirection: "row",
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  headerText: {
+    fontSize: 18,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#F0F0F4",
+    backgroundColor: "#ffffff",
+    borderRadius: 20,
+    padding: 5,
+    margin: 10,
+  },
+  searchIcon: {
+    marginRight: 15,
+    paddingLeft: 10,
+  },
+  searchInput: {
+    flex: 1,
+    height: 40,
+    fontSize: 16,
+  },
+  contrainerProduct: {
+    /* flex: 1, */
+    width: "100%",
+    /*  height: "100%", */
+    overflow: "scroll",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    /*    backgroundColor: "tomato", */
+    gap: 6,
+    /*     paddingVertical: 20, */
+    paddingHorizontal: 10,
+
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  productCard: {
+    width: "47%",
+    height: 100,
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 12,
+    /*     margin: 10, */
+    flexDirection: "row",
+    alignItems: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  productImage: {
+    width: 80,
+    height: 80,
+    padding: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  productDetails: {
+    /*     flex: 1, */
+  },
+  productName: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  productPrice: {
+    fontSize: 14,
+    color: "gray",
+  },
+
+  floatingButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#25D360",
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+});

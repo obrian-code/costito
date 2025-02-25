@@ -17,7 +17,10 @@ export function Final() {
       gastosOperativos: 30,
     },
   ]);
-
+  /*  */
+  const [visible, setVisible] = useState(false); // Estado para mostrar/ocultar el menú
+  const [selectedItem, setSelectedItem] = useState(null); // Estado para el item seleccionado
+  /*  */
   const calcularTotales = () => {
     const totalMateriaPrima = datos.reduce(
       (acc, item) => acc + item.materiaPrima,
@@ -54,7 +57,24 @@ export function Final() {
   };
 
   const totales = calcularTotales();
+  /*  */
+  const handleMenuPress = (index: unknown) => {
+    setSelectedItem(index);
+    setVisible(true);
+  };
 
+  const handleMenuItemPress = (value: string) => {
+    setVisible(false);
+    if (value === "Editar") {
+      // Lógica para editar
+      console.log("Editar presionado");
+    } else if (value === "Eliminar") {
+      // Lógica para eliminar
+      console.log("Eliminar presionado");
+    }
+  };
+
+  /*  */
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScrollView>

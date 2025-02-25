@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import * as XLSX from "xlsx";
+import RNFS from "react-native-fs";
 
 export function Data() {
   const [datos] = useState([
@@ -26,9 +28,35 @@ export function Data() {
     },
   ]);
 
-  const handleExportarData = () => {
-    console.log("Exportar data ---");
+  const handleExportarData = async () => {
+    /*    const ws = XLSX.utils.json_to_sheet(datos);
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Datos");
+
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "binary" });
+
+    const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+
+    const filePath = `${RNFS.DownloadDirectoryPath}/datos_producto.xlsx`;
+
+    RNFS.writeFile(filePath, blob.toString(), "ascii")
+      .then(() => {
+        console.log("Archivo guardado en:", filePath);
+      })
+      .catch((error) => {
+        console.error("Error al guardar el archivo:", error);
+      }); */
   };
+
+  /*   const s2ab = (s: string) => {
+    const buf = new ArrayBuffer(s.length);
+    const view = new Uint8Array(buf);
+    for (let i = 0; i < s.length; i++) {
+      view[i] = s.charCodeAt(i) & 0xff;
+    }
+    return buf;
+  }; */
 
   return (
     <GestureHandlerRootView style={styles.container}>

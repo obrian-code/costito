@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 interface Item {
-  [x: string]: string | number;
+  [x: string]: string;
 }
 
 interface Props {
@@ -25,11 +25,11 @@ export function FlatListField({ datos, handleEdit, handleDelete }: Props) {
   return (
     <FlatList
       data={datos}
-      keyExtractor={(item: Item) => (item as { id: number }).id.toString()}
+      keyExtractor={(item: Item) => (item as { id: string }).id}
       renderItem={({ item }) => (
         <View style={styles.record}>
           <View style={styles.info}>
-            <Text>{`Materia Prima: ${item.materiaPrima}`}</Text>
+            <Text>{`Nombre: ${item.name}`}</Text>
             <Text>{`PT: ${item.pt}`}</Text>
             <Text>{`Cantidad: ${item.cant}`}</Text>
             <Text>{`PU: ${item.pu}`}</Text>
@@ -59,7 +59,7 @@ export function FlatListField({ datos, handleEdit, handleDelete }: Props) {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.deleteButton}
-              onPress={() => handleDelete(item.id.toString())}
+              onPress={() => handleDelete((item as { id: string }).id)}
             >
               <AntDesign
                 style={styles.buttonText}

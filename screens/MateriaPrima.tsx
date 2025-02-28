@@ -3,64 +3,47 @@ import { FieldsI } from "@/interface/Fields";
 import React, { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { FlatListField } from "../components/FlatListField";
+import { useProduct } from "@/context/ProductContext";
 
-interface RegistroI {
-  id: string;
-  materiaPrima: string;
-  pt: string;
-  cant: string;
-  pu: string;
-}
-
-export function Formulario1() {
-  const [datos, setDatos] = useState<RegistroI[]>([]);
-  const [formState, setFormState] = useState<RegistroI>({
+export function MateriaPrima() {
+  const { productData, addProduct } = useProduct();
+  const [formState, setFormState] = useState<FormI>({
     id: "",
-    materiaPrima: "",
+    name: "",
     pt: "",
     cant: "",
     pu: "",
   });
-  const [isEditing, setIsEditing] = useState(false);
 
   const handleSubmit = () => {
-    const { materiaPrima, pt, cant, pu } = formState;
+    const { name, pt, cant, pu } = formState;
 
-    if (!materiaPrima || !pt || !cant || !pu) {
+    if (!name || !pt || !cant || !pu) {
       Alert.alert("Error", "Por favor, completa todos los campos.");
       return;
     }
 
-    if (isEditing) {
-      setDatos((prevDatos) =>
-        prevDatos.map((item) =>
-          item.id === formState.id ? { ...formState } : item
-        )
-      );
-    } else {
-      const nuevoRegistro: RegistroI = {
-        id: Math.random().toString(),
-        materiaPrima,
-        pt,
-        cant,
-        pu,
-      };
-      setDatos((prevDatos) => [...prevDatos, nuevoRegistro]);
-    }
+    const nuevoRegistro = {
+      id: Math.random().toString(),
+      name: name,
+      pt,
+      cant,
+      pu,
+    };
+
+    addProduct("materia_prima", nuevoRegistro);
 
     setFormState({
       id: "",
-      materiaPrima: "",
+      name: "",
       pt: "",
       cant: "",
       pu: "",
     });
-    setIsEditing(false);
   };
 
-  const handleEdit = (item: RegistroI) => {
+  const handleEdit = (item: FormI) => {
     setFormState(item);
-    setIsEditing(true);
   };
 
   const handleDelete = (id: string) => {
@@ -72,7 +55,11 @@ export function Formulario1() {
         {
           text: "Eliminar",
           onPress: () => {
-            setDatos((prevDatos) => prevDatos.filter((item) => item.id !== id));
+            const updatedList = productData.materia_prima.filter(
+              (item) => item.id !== id
+            );
+
+            productData.materia_prima = updatedList;
           },
         },
       ]
@@ -82,9 +69,9 @@ export function Formulario1() {
   const campos: Array<FieldsI> = [
     {
       label: "Materia Prima",
-      value: formState.materiaPrima,
+      value: formState.name,
       onChangeText: (value: string) =>
-        setFormState({ ...formState, materiaPrima: value }),
+        setFormState({ ...formState, name: value }),
     },
     {
       label: "PT",
@@ -117,7 +104,7 @@ export function Formulario1() {
         onSubmit={handleSubmit}
       />
       <FlatListField
-        datos={datos as never}
+        datos={productData.materia_prima as never}
         handleEdit={handleEdit as never}
         handleDelete={handleDelete}
       />

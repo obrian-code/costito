@@ -1,13 +1,11 @@
-import { Final } from "@/screens/final";
-import { Formulario3 } from "@/screens/Formulario3";
-import { Formulario4 } from "@/screens/Formulario4";
-
+import { CostAnalysis } from "@/screens/CostAnalysis";
+import { ManoDeObra } from "@/screens/ManoDeObra";
+import { GastosOperativos } from "@/screens/GastosOperativos";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Steps } from "../../components/Steps";
 import { IGVSelector } from "@/screens/IGVSelector";
-import { Formulario2 } from "@/screens/Formulario2";
-import { Formulario1 } from "@/screens/Formulario1";
-import { Formulario0 } from "@/screens/Formulario0";
+import { Packaging } from "@/screens/Packaging";
+import { MateriaPrima } from "@/screens/MateriaPrima";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -15,6 +13,9 @@ import {
   ScrollView,
 } from "react-native-gesture-handler";
 import { Stack } from "expo-router";
+import { ProductProvider } from "@/context/ProductContext";
+import { NameProduct } from "@/screens/NameProduct";
+
 export default function AddProductScreen() {
   const [isIGVSelected, setIsIGVSelected] = useState(false);
 
@@ -38,7 +39,7 @@ export default function AddProductScreen() {
       title: "Step 1",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Formulario0 />
+          <NameProduct />
         </ScrollView>
       ),
     },
@@ -46,7 +47,7 @@ export default function AddProductScreen() {
       title: "Step 2",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Formulario1 />
+          <MateriaPrima />
         </ScrollView>
       ),
     },
@@ -54,7 +55,7 @@ export default function AddProductScreen() {
       title: "Step 3",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Formulario2 />
+          <Packaging />
         </ScrollView>
       ),
     },
@@ -62,7 +63,7 @@ export default function AddProductScreen() {
       title: "Step 4",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Formulario3 />
+          <ManoDeObra />
         </ScrollView>
       ),
     },
@@ -70,7 +71,7 @@ export default function AddProductScreen() {
       title: "Step 5",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Formulario4 />
+          <GastosOperativos />
         </ScrollView>
       ),
     },
@@ -78,7 +79,7 @@ export default function AddProductScreen() {
       title: "Step 6",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Final />
+          <CostAnalysis />
         </ScrollView>
       ),
     },
@@ -86,10 +87,12 @@ export default function AddProductScreen() {
 
   return (
     <GestureHandlerRootView>
-      <Stack.Screen options={{ title: "Registrar Producto" }} />
-      <SafeAreaView style={{ flex: 1 }}>
-        {isIGVSelected ? <Steps steps={steps} /> : <IGVSelector />}
-      </SafeAreaView>
+      <ProductProvider>
+        <Stack.Screen options={{ title: "Registrar Producto" }} />
+        <SafeAreaView style={{ flex: 1 }}>
+          {isIGVSelected ? <Steps steps={steps} /> : <IGVSelector />}
+        </SafeAreaView>
+      </ProductProvider>
     </GestureHandlerRootView>
   );
 }

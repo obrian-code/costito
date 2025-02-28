@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 
 export default function HomeScreen() {
@@ -92,10 +92,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 key={product.id}
                 style={styles.productCard}
-                onPress={() => {
-                  router.push(`/(product)/info/${product.id}`);
-                  console.log("Botón flotante presionado", product.id);
-                }}
+                onPress={() => router.push(`/(product)/info/${product.id}`)}
               >
                 <View style={styles.productDetails}>
                   <Text style={styles.productName}>{product.name}</Text>

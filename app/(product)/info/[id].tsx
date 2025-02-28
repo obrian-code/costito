@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import React from "react";
 import {
   View,
@@ -56,6 +56,9 @@ const DataTable = ({ title }: { title: string }) => {
 };
 
 export default function InfoScreen() {
+  const { id } = useLocalSearchParams();
+  console.log({ id });
+
   return (
     <>
       <Stack.Screen options={{ title: "Información" }} />

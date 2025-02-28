@@ -1,10 +1,10 @@
+import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import {
   StyleSheet,
   View,
   Text,
   TextInput,
-  Button,
   TouchableOpacity,
 } from "react-native";
 
@@ -41,6 +41,7 @@ export function FormularioGenerico({
         </View>
       ))}
       <TouchableOpacity style={styles.Submit} onPress={onSubmit}>
+        <AntDesign name="plus" size={20} color="#25D360" />
         <Text style={styles.SubmitText}>Agregar</Text>
       </TouchableOpacity>
     </View>
@@ -51,10 +52,13 @@ const styles = StyleSheet.create({
   formContainer: {
     marginBottom: 20,
     padding: 20,
-    borderColor: "lightgray",
-    borderWidth: 1,
     borderRadius: 5,
     backgroundColor: "#f9f9f9",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 10,
   },
   title: {
     fontSize: 20,
@@ -77,8 +81,10 @@ const styles = StyleSheet.create({
   },
   Submit: {
     display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    gap: 5,
     width: "100%",
     height: 50,
     borderColor: "#25D360",
@@ -87,7 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   SubmitText: {
-    color: "green",
+    color: "#25D360",
     fontSize: 15,
   },
 });

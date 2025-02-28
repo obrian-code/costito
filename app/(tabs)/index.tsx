@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 
 export default function HomeScreen() {
@@ -50,6 +50,8 @@ export default function HomeScreen() {
   const filterProducts = products.filter((product) =>
     product.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
   );
+
+  const router = useRouter();
 
   return (
     <GestureHandlerRootView>
@@ -90,9 +92,10 @@ export default function HomeScreen() {
               <TouchableOpacity
                 key={product.id}
                 style={styles.productCard}
-                onPress={() =>
-                  console.log("Botón flotante presionado", product.id)
-                }
+                onPress={() => {
+                  router.push(`/(product)/info/${product.id}`);
+                  console.log("Botón flotante presionado", product.id);
+                }}
               >
                 <View style={styles.productDetails}>
                   <Text style={styles.productName}>{product.name}</Text>
@@ -108,10 +111,11 @@ export default function HomeScreen() {
             ))}
           </View>
         </ScrollView>
-        <TouchableOpacity style={styles.floatingButton}>
-          <Link replace href="/(product)/add">
-            <Ionicons name="add" size={30} color="white" />
-          </Link>
+        <TouchableOpacity
+          style={styles.floatingButton}
+          onPress={() => router.push(`/(product)/add`)}
+        >
+          <Ionicons name="add" size={30} color="white" />
         </TouchableOpacity>
       </View>
     </GestureHandlerRootView>
@@ -191,17 +195,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   contrainerProduct: {
-    /* flex: 1, */
     width: "100%",
-    /*  height: "100%", */
     overflow: "scroll",
     flexDirection: "row",
     flexWrap: "wrap",
-    /*    backgroundColor: "tomato", */
-    gap: 6,
-    /*     paddingVertical: 20, */
-    paddingHorizontal: 10,
-
+    gap: 12,
+    paddingHorizontal: 20,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -209,9 +208,8 @@ const styles = StyleSheet.create({
     width: "47%",
     height: 100,
     backgroundColor: "white",
-    borderRadius: 8,
+    borderRadius: 4,
     padding: 12,
-    /*     margin: 10, */
     flexDirection: "row",
     alignItems: "center",
     elevation: 3,

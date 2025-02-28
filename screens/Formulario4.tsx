@@ -122,34 +122,34 @@ export function Formulario4() {
         campos={campos}
         onSubmit={handleSubmit}
       />
-      <ScrollView>
-        <FlatList
-          data={datos}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.record}>
-              <Text>{`Gastos OP: ${item.gastosOp}`}</Text>
-              <Text>{`PT: ${item.pt}`}</Text>
-              <Text>{`Cantidad: ${item.cant}`}</Text>
-              <Text>{`PU: ${item.pu}`}</Text>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.editButton}
-                  onPress={() => handleEdit(item)}
-                >
-                  <Text style={styles.buttonText}>Editar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => handleDelete(item.id)}
-                >
-                  <Text style={styles.buttonText}>Eliminar</Text>
-                </TouchableOpacity>
-              </View>
+      {/*     <ScrollView> */}
+      <FlatList
+        data={datos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.record}>
+            <Text>{`Gastos OP: ${item.gastosOp}`}</Text>
+            <Text>{`PT: ${item.pt}`}</Text>
+            <Text>{`Cantidad: ${item.cant}`}</Text>
+            <Text>{`PU: ${item.pu}`}</Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={() => handleEdit(item)}
+              >
+                <Text style={styles.buttonText}>Editar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => handleDelete(item.id)}
+              >
+                <Text style={styles.buttonText}>Eliminar</Text>
+              </TouchableOpacity>
             </View>
-          )}
-        />
-      </ScrollView>
+          </View>
+        )}
+      />
+      {/*    </ScrollView> */}
     </View>
   );
 }

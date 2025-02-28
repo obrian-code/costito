@@ -15,7 +15,7 @@ import {
   ScrollView,
 } from "react-native-gesture-handler";
 import { Stack } from "expo-router";
-export function AddProductScreen() {
+export default function AddProductScreen() {
   const [isIGVSelected, setIsIGVSelected] = useState(false);
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export function AddProductScreen() {
 
   return (
     <GestureHandlerRootView>
-      {/* <Stack.Screen options={{ title: "Registro Producto" }} /> */}
+      <Stack.Screen options={{ title: "Registrar Producto" }} />
       <SafeAreaView style={{ flex: 1 }}>
         {isIGVSelected ? <Steps steps={steps} /> : <IGVSelector />}
       </SafeAreaView>

@@ -1,8 +1,8 @@
 import { FormularioGenerico } from "@/components/FormularioGenerico";
 import { FieldsI } from "@/interface/Fields";
 import React, { useState } from "react";
-import { Alert, StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { Alert, StyleSheet, View } from "react-native";
+import { FlatListField } from "../components/FlatListField";
 
 interface RegistroI {
   id: string;
@@ -116,34 +116,11 @@ export function Formulario1() {
         campos={campos}
         onSubmit={handleSubmit}
       />
-      <ScrollView>
-        <FlatList
-          data={datos}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.record}>
-              <Text>{`Materia Prima: ${item.materiaPrima}`}</Text>
-              <Text>{`PT: ${item.pt}`}</Text>
-              <Text>{`Cantidad: ${item.cant}`}</Text>
-              <Text>{`PU: ${item.pu}`}</Text>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.editButton}
-                  onPress={() => handleEdit(item)}
-                >
-                  <Text style={styles.buttonText}>Editar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => handleDelete(item.id)}
-                >
-                  <Text style={styles.buttonText}>Eliminar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        />
-      </ScrollView>
+      <FlatListField
+        datos={datos as never}
+        handleEdit={handleEdit as never}
+        handleDelete={handleDelete}
+      />
     </View>
   );
 }
@@ -153,29 +130,5 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: "flex-start",
-  },
-  record: {
-    marginVertical: 5,
-    padding: 10,
-    borderColor: "lightgray",
-    borderWidth: 1,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
-  },
-  editButton: {
-    backgroundColor: "#007BFF", // Color para el botón de Editar
-    padding: 10,
-    borderRadius: 5,
-  },
-  deleteButton: {
-    backgroundColor: "red", // Color para el botón de Eliminar
-    padding: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "#fff",
   },
 });

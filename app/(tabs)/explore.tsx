@@ -1,5 +1,5 @@
-import { Data } from "@/screens/Data";
+import { AboutScreen } from "@/screens/Data";
 
 export default function TabTwoScreen() {
-  return <Data></Data>;
+  return <AboutScreen />;
 }

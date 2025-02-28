@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
   TouchableOpacity,
   Keyboard,
 } from "react-native";
@@ -83,7 +82,7 @@ export function Steps({ steps }: StepsProps) {
                   style={[
                     styles.line,
                     {
-                      backgroundColor: index < currentStep ? "#007BFF" : "#ccc",
+                      backgroundColor: index < currentStep ? "#25D360" : "#ccc",
                     },
                   ]}
                 />
@@ -144,18 +143,23 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   activeStepCircle: {
-    borderColor: "#007BFF",
-    backgroundColor: "#E3F2FD",
+    borderColor: "#25D360",
+    backgroundColor: "#25D360",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 10,
   },
   completedStepCircle: {
-    borderColor: "#007BFF",
-    backgroundColor: "#E3F2FD",
+    borderColor: "#21bd56",
+    backgroundColor: "#21bd56",
   },
   stepNumber: {
     fontWeight: "bold",
   },
   stepNumberEnable: {
-    color: "#007BFF",
+    color: "#FFF",
   },
   stepNumberDisable: {
     color: "#ccc",
@@ -177,7 +181,6 @@ const styles = StyleSheet.create({
     padding: 20,
     flexDirection: "row",
     justifyContent: "space-between",
-
     backgroundColor: "white",
   },
   buttonNext: {

@@ -2,7 +2,6 @@ import {
   GestureHandlerRootView,
   ScrollView,
 } from "react-native-gesture-handler";
-
 import {
   View,
   Text,
@@ -10,54 +9,73 @@ import {
   StyleSheet,
   TextInput,
 } from "react-native";
-
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useSQLiteContext } from "expo-sqlite";
+import * as FileSystem from "expo-file-system";
 export default function HomeScreen() {
   const [search, setSearch] = useState("");
-  const generateRandomProduct = (index) => {
-    const names = [
-      "Producto A",
-      "Producto B",
-      "Producto C",
-      "Producto D",
-      "Producto E",
-    ];
-    const price = Math.floor(Math.random() * 100) + 1;
-    const igv = price * 0.18;
-    const cost = price - igv;
 
-    return {
-      id: index,
-      name: names[index % names.length],
-      unitCost: cost.toFixed(2),
-      igv: igv.toFixed(2),
-      price: price.toFixed(2),
-    };
-  };
-
-  const generateProducts = () => {
-    const products = [];
-    for (let i = 0; i < 20; i++) {
-      products.push(generateRandomProduct(i));
-    }
-    return products;
-  };
-
-  const products = generateProducts();
-  const filterProducts = products.filter((product) =>
-    product.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-  );
+  const db = useSQLiteContext();
+  const [version, setVersion] = useState("");
+  const [products, setProducts] = useState<
+    { id: number; nombre: string; descripcion: string; precio: number }[]
+  >([]);
 
   const router = useRouter();
+
+  useEffect(() => {
+    async function setup() {
+      /*    console.log(
+        "Ruta de la base de datos:",
+        FileSystem.documentDirectory + "SQLite/test.db"
+      ); */
+
+      /*  await db.execAsync(`
+        PRAGMA foreign_keys = OFF;
+        DROP TABLE IF EXISTS Producto;
+        DROP TABLE IF EXISTS materia_prima;
+        DROP TABLE IF EXISTS packaging;
+        DROP TABLE IF EXISTS mano_obra;
+        DROP TABLE IF EXISTS gastos_operativos;
+        DROP TABLE IF EXISTS CostAnalysis;
+        PRAGMA foreign_keys = ON;
+      `); */
+      const result = await db.getFirstAsync<{ "sqlite_version()": string }>(
+        "SELECT sqlite_version()"
+      );
+      if (result) {
+        setVersion(result["sqlite_version()"]);
+      }
+      await fetchProducts();
+    }
+    setup();
+  }, []);
+
+  async function fetchProducts() {
+    try {
+      const result = await db.getAllAsync<{
+        id: number;
+        nombre: string;
+        descripcion: string;
+        precio: number;
+      }>("SELECT id, nombre,descripcion, precio FROM Producto");
+      setProducts(result);
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+    }
+  }
+
+  const filterProducts = products.filter((product) =>
+    product.nombre.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  );
 
   return (
     <GestureHandlerRootView>
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Costito</Text>
+          <Text style={styles.title}>Costito/SQLite version: {version}</Text>
         </View>
         <TouchableOpacity
           style={styles.button}
@@ -94,14 +112,13 @@ export default function HomeScreen() {
                 style={styles.productCard}
                 onPress={() => router.push(`/(product)/info/${product.id}`)}
               >
-                <View style={styles.productDetails}>
-                  <Text style={styles.productName}>{product.name}</Text>
-                  <Text style={styles.productPrice}>
-                    Costo UNI: {product.unitCost}
+                <View>
+                  <Text style={styles.productName}>{product.nombre}</Text>
+                  <Text style={styles.productDescription}>
+                    {product.descripcion}
                   </Text>
-                  <Text style={styles.productPrice}>IGV: {product.igv}</Text>
                   <Text style={styles.productPrice}>
-                    Precio: {product.price}
+                    Precio: {product.precio}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -222,12 +239,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  productDetails: {
-    /*     flex: 1, */
-  },
+
   productName: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+
+  productDescription: {
+    fontSize: 14,
+    color: "gray",
+    fontWeight: "500",
   },
   productPrice: {
     fontSize: 14,

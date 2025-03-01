@@ -47,7 +47,7 @@ export function GastosOperativos() {
 
   const handleSubmit = () => {
     const { name, pt, cant, pu } = formState;
-
+    console.log(!name || !pt || !cant || !pu);
     if (!name || !pt || !cant || !pu) {
       Alert.alert("Error", "Por favor, completa todos los campos.");
       return;

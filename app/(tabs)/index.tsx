@@ -10,8 +10,8 @@ import {
   TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import * as FileSystem from "expo-file-system";
 export default function HomeScreen() {
@@ -66,6 +66,12 @@ export default function HomeScreen() {
       console.error("Error al obtener productos:", error);
     }
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProducts();
+    }, [])
+  );
 
   const filterProducts = products.filter((product) =>
     product.nombre.toLocaleLowerCase().includes(search.toLocaleLowerCase())

@@ -136,6 +136,7 @@ export function CostAnalysis() {
       alert("No se pudo guardar los datos.");
     }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>

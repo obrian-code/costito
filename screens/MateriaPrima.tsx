@@ -6,7 +6,7 @@ import { FlatListField } from "../components/FlatListField";
 import { useProduct } from "@/context/ProductContext";
 
 export function MateriaPrima() {
-  const { productData, addProduct } = useProduct();
+  const { productData, addProduct, deleteProduct } = useProduct();
   const [formState, setFormState] = useState<FormI>({
     id: "",
     name: "",
@@ -55,11 +55,7 @@ export function MateriaPrima() {
         {
           text: "Eliminar",
           onPress: () => {
-            const updatedList = productData.materia_prima.filter(
-              (item) => item.id !== id
-            );
-
-            productData.materia_prima = updatedList;
+            deleteProduct("materia_prima", id);
           },
         },
       ]
@@ -74,28 +70,36 @@ export function MateriaPrima() {
         setFormState({ ...formState, name: value }),
     },
     {
-      label: "PT",
-      value: formState.pt,
-      onChangeText: (value: string) =>
-        setFormState({ ...formState, pt: value }),
-      keyboardType: "numeric",
-    },
-    {
       label: "Cantidad",
       value: formState.cant,
       onChangeText: (value: string) =>
-        setFormState({ ...formState, cant: value }),
+        setFormState({
+          ...formState,
+          cant: value,
+          pt: (parseFloat(value) * parseFloat(formState.pu || "0")).toString(),
+        }),
       keyboardType: "numeric",
     },
     {
-      label: "PU",
+      label: "Precio Unitario",
       value: formState.pu,
       onChangeText: (value: string) =>
-        setFormState({ ...formState, pu: value }),
+        setFormState({
+          ...formState,
+          pu: value,
+          pt: (
+            parseFloat(value) * parseFloat(formState.cant || "0")
+          ).toString(),
+        }),
       keyboardType: "numeric",
     },
+    {
+      label: "Precio Total",
+      value: formState.pt,
+      disabled: true,
+    },
   ];
-
+  console.log(productData.materia_prima);
   return (
     <View style={styles.container}>
       <FormularioGenerico

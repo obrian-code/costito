@@ -1,27 +1,34 @@
 import React, { createContext, useState, useContext } from "react";
 
-interface Product {
+interface MaterialI {
   id: string;
   name: string;
   pt: string;
   cant: string;
   pu: string;
 }
-
+interface ProductI {
+  name: string;
+  description: string;
+}
 interface ProductData {
-  Producto: string;
-  materia_prima: Product[];
-  packaging: Product[];
-  mano_obra: Product[];
-  gastos_operativos: Product[];
+  Producto: ProductI;
+  materia_prima: MaterialI[];
+  packaging: MaterialI[];
+  mano_obra: MaterialI[];
+  gastos_operativos: MaterialI[];
 }
 
 interface ProductContextType {
   productData: ProductData;
-  setProductoName: (name: string) => void;
+  setProducto: (product: ProductI) => void;
   addProduct: (
     category: keyof Omit<ProductData, "Producto">,
-    product: Product
+    product: MaterialI
+  ) => void;
+  deleteProduct: (
+    category: keyof Omit<ProductData, "Producto">,
+    id: string
   ) => void;
 }
 
@@ -31,20 +38,23 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [productData, setProductData] = useState<ProductData>({
-    Producto: "",
+    Producto: {
+      name: "",
+      description: "",
+    },
     materia_prima: [],
     packaging: [],
     mano_obra: [],
     gastos_operativos: [],
   });
 
-  const setProductoName = (name: string) => {
-    setProductData((prev) => ({ ...prev, Producto: name }));
+  const setProducto = (product: ProductI) => {
+    setProductData((prev) => ({ ...prev, Producto: product }));
   };
 
   const addProduct = (
     category: keyof Omit<ProductData, "Producto">,
-    product: Product
+    product: MaterialI
   ) => {
     setProductData((prev) => ({
       ...prev,
@@ -52,9 +62,19 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({
     }));
   };
 
+  const deleteProduct = (
+    category: keyof Omit<ProductData, "Producto">,
+    id: string
+  ) => {
+    setProductData((prev) => ({
+      ...prev,
+      [category]: prev[category].filter((item) => item.id !== id),
+    }));
+  };
+
   return (
     <ProductContext.Provider
-      value={{ productData, setProductoName, addProduct }}
+      value={{ productData, setProducto, addProduct, deleteProduct }}
     >
       {children}
     </ProductContext.Provider>

@@ -4,11 +4,12 @@ import { FormularioGenerico } from "@/components/FormularioGenerico";
 import { FieldsI } from "@/interface/Fields";
 import { useProduct } from "@/context/ProductContext";
 
-export function NameProduct() {
-  const { setProductoName, productData } = useProduct();
+export function Producto() {
+  const { setProducto, productData } = useProduct();
 
   const [data, setData] = useState({
     producto: "",
+    descripcion: "",
     toggle: false,
   });
 
@@ -18,6 +19,11 @@ export function NameProduct() {
       value: data.producto,
       onChangeText: (value: string) => setData({ ...data, producto: value }),
     },
+    {
+      label: "Descripcion",
+      value: data.descripcion,
+      onChangeText: (value: string) => setData({ ...data, descripcion: value }),
+    },
   ];
 
   const handleSubmit = () => {
@@ -26,8 +32,8 @@ export function NameProduct() {
       return;
     }
 
-    setProductoName(data.producto);
-    setData({ producto: "", toggle: true });
+    setProducto({ name: data.producto, description: data.descripcion });
+    setData({ producto: "", descripcion: "", toggle: true });
   };
 
   return (
@@ -42,7 +48,10 @@ export function NameProduct() {
           <Text style={styles.listTitle}>Producto:</Text>
 
           <View style={styles.itemContainer}>
-            <Text style={styles.itemText}>{productData.Producto}</Text>
+            <Text style={styles.itemText}>{productData.Producto.name}</Text>
+            <Text style={styles.itemDescription}>
+              {productData.Producto.description}
+            </Text>
           </View>
         </View>
       )}
@@ -74,10 +83,13 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
   },
   itemText: {
     fontSize: 16,
+  },
+  itemDescription: {
+    fontSize: 14,
+    color: "gray",
+    fontWeight: "500",
   },
 });

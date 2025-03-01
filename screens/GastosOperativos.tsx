@@ -6,7 +6,7 @@ import { useProduct } from "@/context/ProductContext";
 import { FlatListField } from "@/components/FlatListField";
 
 export function GastosOperativos() {
-  const { productData, addProduct } = useProduct();
+  const { productData, addProduct, deleteProduct } = useProduct();
   const [formState, setFormState] = useState<FormI>({
     id: "",
     name: "",
@@ -18,40 +18,50 @@ export function GastosOperativos() {
   const campos: Array<FieldsI> = [
     {
       label: "Gastos OP",
-      value: formState.gastosOp,
+      value: formState.name,
       onChangeText: (value: string) =>
-        setFormState({ ...formState, gastosOp: value }),
+        setFormState({ ...formState, name: value }),
     },
-    {
-      label: "PT",
-      value: formState.pt,
-      onChangeText: (value: string) =>
-        setFormState({ ...formState, pt: value }),
-      keyboardType: "numeric",
-    },
+
     {
       label: "Cantidad",
       value: formState.cant,
       onChangeText: (value: string) =>
-        setFormState({ ...formState, cant: value }),
+        setFormState({
+          ...formState,
+          cant: value,
+          pt: (parseFloat(value) * parseFloat(formState.pu || "0")).toString(),
+        }),
       keyboardType: "numeric",
     },
     {
-      label: "PU",
+      label: "Precio Unitario",
       value: formState.pu,
       onChangeText: (value: string) =>
-        setFormState({ ...formState, pu: value }),
+        setFormState({
+          ...formState,
+          pu: value,
+          pt: (
+            parseFloat(value) * parseFloat(formState.cant || "0")
+          ).toString(),
+        }),
       keyboardType: "numeric",
+    },
+    {
+      label: "Precio Total",
+      value: formState.pt,
+      disabled: true,
     },
   ];
 
   const handleSubmit = () => {
     const { name, pt, cant, pu } = formState;
-    console.log(!name || !pt || !cant || !pu);
+
     if (!name || !pt || !cant || !pu) {
       Alert.alert("Error", "Por favor, completa todos los campos.");
       return;
     }
+
     const nuevoRegistro = {
       id: Math.random().toString(),
       name: name,
@@ -84,11 +94,7 @@ export function GastosOperativos() {
         {
           text: "Eliminar",
           onPress: () => {
-            const updatedList = productData.materia_prima.filter(
-              (item) => item.id !== id
-            );
-
-            productData.materia_prima = updatedList;
+            deleteProduct("gastos_operativos", id);
           },
         },
       ]

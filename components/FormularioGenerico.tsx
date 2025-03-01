@@ -11,8 +11,9 @@ import {
 interface Campo {
   label: string;
   value: string;
-  onChangeText: (value: string) => void;
+  onChangeText?: (value: string) => void;
   keyboardType?: "default" | "numeric" | "email-address" | "phone-pad";
+  disabled?: boolean;
 }
 
 interface FormularioGenericoProps {
@@ -37,6 +38,7 @@ export function FormularioGenerico({
             value={campo.value}
             onChangeText={campo.onChangeText}
             keyboardType={campo.keyboardType}
+            disableFullscreenUI={campo.disabled}
           />
         </View>
       ))}

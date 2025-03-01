@@ -14,7 +14,7 @@ import {
 } from "react-native-gesture-handler";
 import { Stack } from "expo-router";
 import { ProductProvider } from "@/context/ProductContext";
-import { NameProduct } from "@/screens/NameProduct";
+import { Producto } from "@/screens/Producto";
 
 export default function AddProductScreen() {
   const [isIGVSelected, setIsIGVSelected] = useState(false);
@@ -39,7 +39,7 @@ export default function AddProductScreen() {
       title: "Step 1",
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <NameProduct />
+          <Producto />
         </ScrollView>
       ),
     },

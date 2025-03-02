@@ -147,7 +147,11 @@ export function GastosOperativos({
   };
 
   useEffect(() => {
-    setStepOption({ ...stepOption, isStepValid: true });
+    let isStepValid = true;
+    if (productData.gastos_operativos.length > 0) {
+      isStepValid = false;
+    }
+    setStepOption({ ...stepOption, isStepValid });
   }, []);
 
   return (

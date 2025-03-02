@@ -142,9 +142,13 @@ export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
   };
 
   useEffect(() => {
-    setStepOption({ ...stepOption, isStepValid: true });
+    let isStepValid = true;
+    if (productData.materia_prima.length > 0) {
+      isStepValid = false;
+    }
+    setStepOption({ ...stepOption, isStepValid });
   }, []);
-
+  console.log(stepOption);
   return (
     <View style={styles.container}>
       <FormularioGenerico

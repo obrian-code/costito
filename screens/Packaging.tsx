@@ -143,7 +143,11 @@ export function Packaging({ setStepOption, stepOption }: StepOptionConfigI) {
   };
 
   useEffect(() => {
-    setStepOption({ ...stepOption, isStepValid: true });
+    let isStepValid = true;
+    if (productData.packaging.length > 0) {
+      isStepValid = false;
+    }
+    setStepOption({ ...stepOption, isStepValid });
   }, []);
 
   return (

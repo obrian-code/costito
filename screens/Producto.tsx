@@ -17,7 +17,6 @@ export function Producto({ setStepOption, stepOption }: StepOptionConfigI) {
     descripcion: "",
     margenUtilidad: "20",
     igv: "0.18",
-    toggle: false,
   });
 
   const { errors, setFormInteraction } = useFormValidation(
@@ -83,7 +82,7 @@ export function Producto({ setStepOption, stepOption }: StepOptionConfigI) {
       isTouched: false,
     });
 
-    if (data.toggle) {
+    if (productData.Producto.name.length > 0) {
       Alert.alert("Error", "Ya existe un producto registrado.");
       return;
     }
@@ -124,7 +123,6 @@ export function Producto({ setStepOption, stepOption }: StepOptionConfigI) {
       descripcion: "",
       margenUtilidad: "20",
       igv: "0.18",
-      toggle: true,
     });
   };
 
@@ -155,12 +153,14 @@ export function Producto({ setStepOption, stepOption }: StepOptionConfigI) {
     };
 
     loadProductConfig();
-  }, [data.toggle]);
 
-  useEffect(() => {
-    setStepOption({ ...stepOption, isStepValid: true });
+    let isStepValid = true;
+    if (productData.Producto.name.length > 0) {
+      isStepValid = false;
+    }
+    setStepOption({ ...stepOption, isStepValid });
   }, []);
-
+  console.log(productData.Producto);
   return (
     <View style={styles.container}>
       <FormularioGenerico
@@ -169,7 +169,7 @@ export function Producto({ setStepOption, stepOption }: StepOptionConfigI) {
         onSubmit={handleSubmit}
         errors={errors}
       />
-      {data.toggle && (
+      {productData.Producto.name.length > 0 && (
         <View style={styles.listContainer}>
           <Text style={styles.listTitle}>Producto:</Text>
 

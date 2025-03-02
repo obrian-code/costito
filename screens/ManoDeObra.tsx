@@ -144,7 +144,11 @@ export function ManoDeObra({ setStepOption, stepOption }: StepOptionConfigI) {
   };
 
   useEffect(() => {
-    setStepOption({ ...stepOption, isStepValid: true });
+    let isStepValid = true;
+    if (productData.mano_obra.length > 0) {
+      isStepValid = false;
+    }
+    setStepOption({ ...stepOption, isStepValid });
   }, []);
 
   return (

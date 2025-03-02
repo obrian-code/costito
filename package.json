@@ -44,7 +44,8 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "xlsx": "^0.18.5",
-    "expo-sharing": "~13.0.1"
+    "expo-sharing": "~13.0.1",
+    "@react-native-picker/picker": "2.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

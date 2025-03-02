@@ -1,3 +1,4 @@
+import { StepsPropsI } from "@/interface/Step";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -7,16 +8,7 @@ import {
   Keyboard,
 } from "react-native";
 
-interface Step {
-  title: string;
-  content: React.ReactNode;
-}
-
-interface StepsProps {
-  steps: Step[];
-}
-
-export function Steps({ steps }: StepsProps) {
+export function Steps({ steps }: StepsPropsI) {
   const [currentStep, setCurrentStep] = useState(0);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -52,11 +44,27 @@ export function Steps({ steps }: StepsProps) {
     }
   };
 
+  const currentStepOption = steps[currentStep].stepOption;
+
+  const handleSubmit = () => {
+    steps[currentStep].setStepOption({
+      ...currentStepOption,
+      submitEvent: true,
+    });
+    setCurrentStep(0);
+  };
+
+  useEffect(() => {
+    if (currentStepOption.submitEvent) {
+      setCurrentStep(0);
+    }
+  }, [currentStepOption]);
+
   return (
     <>
       <View style={styles.container}>
         <View style={styles.stepIndicator}>
-          {steps.map((step, index) => (
+          {steps.map((_, index) => (
             <View key={index} style={styles.stepContainer}>
               <TouchableOpacity
                 style={[
@@ -76,7 +84,7 @@ export function Steps({ steps }: StepsProps) {
                   {index + 1}
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.stepTitle}>{step.title}</Text>
+
               {index < steps.length - 1 && (
                 <View
                   style={[
@@ -100,13 +108,20 @@ export function Steps({ steps }: StepsProps) {
             </TouchableOpacity>
           )}
           {currentStep < steps.length - 1 ? (
-            <TouchableOpacity style={styles.buttonNext} onPress={nextStep}>
+            <TouchableOpacity
+              disabled={currentStepOption.isStepValid}
+              style={[
+                styles.buttonNext,
+                currentStepOption.isStepValid && { backgroundColor: "gray" },
+              ]}
+              onPress={nextStep}
+            >
               <Text style={styles.buttonPrevNext}> Siguiente</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               style={styles.buttonNext}
-              onPress={() => alert("Finished!")}
+              onPress={() => handleSubmit()}
             >
               <Text style={styles.buttonPrevNext}>Finalizar</Text>
             </TouchableOpacity>
@@ -164,10 +179,7 @@ const styles = StyleSheet.create({
   stepNumberDisable: {
     color: "#ccc",
   },
-  stepTitle: {
-    textAlign: "center",
-    fontSize: 12,
-  },
+
   line: {
     position: "absolute",
     top: 20,

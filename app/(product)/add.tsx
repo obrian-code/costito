@@ -3,11 +3,10 @@ import { ManoDeObra } from "@/screens/ManoDeObra";
 import { GastosOperativos } from "@/screens/GastosOperativos";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Steps } from "../../components/Steps";
-import { IGVSelector } from "@/screens/IGVSelector";
 import { Packaging } from "@/screens/Packaging";
 import { MateriaPrima } from "@/screens/MateriaPrima";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
+
 import {
   GestureHandlerRootView,
   ScrollView,
@@ -17,69 +16,66 @@ import { ProductProvider } from "@/context/ProductContext";
 import { Producto } from "@/screens/Producto";
 
 export default function AddProductScreen() {
-  const [isIGVSelected, setIsIGVSelected] = useState(false);
+  const [stepOption, setStepOption] = useState({
+    isStepValid: false,
+    submitEvent: false,
+  });
 
-  useEffect(() => {
-    const checkIGVSelection = async () => {
-      try {
-        const savedIGV = await AsyncStorage.getItem("selectedIGV");
-        if (savedIGV) {
-          setIsIGVSelected(true);
-        }
-        //const savedIGV = await AsyncStorage.clear();
-      } catch (error) {
-        console.error("Error al verificar la selección de IGV:", error);
-      }
-    };
-
-    checkIGVSelection();
-  }, []);
   const steps = [
     {
-      title: "Step 1",
+      setStepOption,
+      stepOption,
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Producto />
+          <Producto stepOption={stepOption} setStepOption={setStepOption} />
         </ScrollView>
       ),
     },
     {
-      title: "Step 2",
+      setStepOption,
+      stepOption,
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <MateriaPrima />
+          <MateriaPrima stepOption={stepOption} setStepOption={setStepOption} />
         </ScrollView>
       ),
     },
     {
-      title: "Step 3",
+      setStepOption,
+      stepOption,
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <Packaging />
+          <Packaging stepOption={stepOption} setStepOption={setStepOption} />
         </ScrollView>
       ),
     },
     {
-      title: "Step 4",
+      setStepOption,
+      stepOption,
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <ManoDeObra />
+          <ManoDeObra stepOption={stepOption} setStepOption={setStepOption} />
         </ScrollView>
       ),
     },
     {
-      title: "Step 5",
+      setStepOption,
+      stepOption,
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <GastosOperativos />
+          <GastosOperativos
+            stepOption={stepOption}
+            setStepOption={setStepOption}
+          />
         </ScrollView>
       ),
     },
     {
-      title: "Step 6",
+      setStepOption,
+      stepOption,
       content: (
         <ScrollView style={{ flex: 1 }}>
-          <CostAnalysis />
+          <CostAnalysis stepOption={stepOption} setStepOption={setStepOption} />
         </ScrollView>
       ),
     },
@@ -90,7 +86,7 @@ export default function AddProductScreen() {
       <ProductProvider>
         <Stack.Screen options={{ title: "Registrar Producto" }} />
         <SafeAreaView style={{ flex: 1 }}>
-          {isIGVSelected ? <Steps steps={steps} /> : <IGVSelector />}
+          <Steps steps={steps} />
         </SafeAreaView>
       </ProductProvider>
     </GestureHandlerRootView>

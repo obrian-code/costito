@@ -1,11 +1,16 @@
 import { FlatListField } from "@/components/FlatListField";
 import { FormularioGenerico } from "@/components/FormularioGenerico";
 import { useProduct } from "@/context/ProductContext";
+import { validationsRuleForm } from "@/helpers/validationrule";
+import { useFormValidation } from "@/hooks/useFormValidation";
 import { FieldsI } from "@/interface/Fields";
-import React, { useState } from "react";
+import { FormI } from "@/interface/Form";
+import { StepOptionConfigI } from "@/interface/Step";
+import { calculatePt } from "@/utils/calculatePt";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Alert } from "react-native";
 
-export function Packaging() {
+export function Packaging({ setStepOption, stepOption }: StepOptionConfigI) {
   const { productData, addProduct, deleteProduct } = useProduct();
 
   const [formState, setFormState] = useState<FormI>({
@@ -16,51 +21,82 @@ export function Packaging() {
     pu: "",
   });
 
+  const { errors, setFormInteraction } = useFormValidation(
+    formState,
+    validationsRuleForm
+  );
+
   const campos: Array<FieldsI> = [
     {
-      label: "Packaging",
+      title: "Packaging",
+      label: "name",
       value: formState.name,
-      onChangeText: (value: string) =>
-        setFormState({ ...formState, name: value }),
+      onChangeText: (value: string) => {
+        setFormState({ ...formState, name: value });
+        setFormInteraction({
+          isSubmitted: false,
+          isTouched: true,
+        });
+      },
     },
     {
-      label: "Cantidad",
+      title: "Cantidad",
+      label: "cant",
       value: formState.cant,
-      onChangeText: (value: string) =>
+      onChangeText: (value: string) => {
         setFormState({
           ...formState,
           cant: value,
-          pt: (parseFloat(value) * parseFloat(formState.pu || "0")).toString(),
-        }),
+          pt: calculatePt(value, formState.pu),
+        });
+        setFormInteraction({
+          isSubmitted: false,
+          isTouched: true,
+        });
+      },
       keyboardType: "numeric",
     },
     {
-      label: "Precio Unitario",
+      title: "Precio Unitario",
+      label: "pu",
       value: formState.pu,
-      onChangeText: (value: string) =>
+      onChangeText: (value: string) => {
         setFormState({
           ...formState,
           pu: value,
-          pt: (
-            parseFloat(value) * parseFloat(formState.cant || "0")
-          ).toString(),
-        }),
+          pt: calculatePt(value, formState.cant),
+        });
+        setFormInteraction({
+          isSubmitted: false,
+          isTouched: true,
+        });
+      },
       keyboardType: "numeric",
     },
     {
-      label: "Precio Total",
+      title: "Precio Total",
+      label: "pt",
       value: formState.pt,
       disabled: true,
     },
   ];
 
   const handleSubmit = () => {
-    const { name, pt, cant, pu } = formState;
+    setFormInteraction({
+      isSubmitted: true,
+      isTouched: false,
+    });
 
-    if (!name || !pt || !cant || !pu) {
-      Alert.alert("Error", "Por favor, completa todos los campos.");
+    const hasErrors =
+      errors && typeof errors === "object" && Object.keys(errors).length > 0;
+
+    setStepOption({ ...stepOption, isStepValid: hasErrors }), stepOption;
+
+    if (hasErrors) {
       return;
     }
+
+    const { name, pt, cant, pu } = formState;
 
     const nuevoRegistro = {
       id: Math.random().toString(),
@@ -71,6 +107,11 @@ export function Packaging() {
     };
 
     addProduct("packaging", nuevoRegistro);
+
+    setFormInteraction({
+      isSubmitted: false,
+      isTouched: false,
+    });
 
     setFormState({
       id: "",
@@ -101,12 +142,17 @@ export function Packaging() {
     );
   };
 
+  useEffect(() => {
+    setStepOption({ ...stepOption, isStepValid: true });
+  }, []);
+
   return (
     <View style={styles.container}>
       <FormularioGenerico
         title="PACKAGING"
         campos={campos}
         onSubmit={handleSubmit}
+        errors={errors}
       />
       <FlatListField
         datos={productData.packaging as never}

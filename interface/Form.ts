@@ -1,4 +1,14 @@
-interface FormI {
+import { FieldsI } from "./Fields";
+import { ValidationErrorsI } from "./Validation";
+
+export interface FormI {
   id: string;
-  [key: string]: string; // Permite cualquier otra clave con valor de tipo string
+  [key: string]: string;
+}
+
+export interface FormularioGenericoPropsI {
+  title: string;
+  campos: FieldsI[];
+  onSubmit: () => void;
+  errors?: ValidationErrorsI;
 }

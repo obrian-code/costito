@@ -30,9 +30,9 @@ export function FlatListField({ datos, handleEdit, handleDelete }: Props) {
         <View style={styles.record}>
           <View style={styles.info}>
             <Text>{`Nombre: ${item.name}`}</Text>
-            <Text>{`PT: ${item.pt}`}</Text>
             <Text>{`Cantidad: ${item.cant}`}</Text>
-            <Text>{`PU: ${item.pu}`}</Text>
+            <Text>{`Precio Unitario: ${item.pu}`}</Text>
+            <Text>{`Precio Total: ${item.pt}`}</Text>
           </View>
           <TouchableOpacity style={styles.menu} onPress={() => toggleMenu()}>
             <Entypo name="dots-two-vertical" size={24} color="black" />

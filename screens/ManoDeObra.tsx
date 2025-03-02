@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Alert } from "react-native";
 import { FieldsI } from "@/interface/Fields";
 import { FormularioGenerico } from "@/components/FormularioGenerico";
 import { FlatListField } from "@/components/FlatListField";
 import { useProduct } from "@/context/ProductContext";
+import { StepOptionConfigI } from "@/interface/Step";
+import { calculatePt } from "@/utils/calculatePt";
+import { FormI } from "@/interface/Form";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { validationsRuleForm } from "@/helpers/validationrule";
 
-export function ManoDeObra() {
+export function ManoDeObra({ setStepOption, stepOption }: StepOptionConfigI) {
   const { productData, addProduct, deleteProduct } = useProduct();
 
   const [formState, setFormState] = useState<FormI>({
@@ -16,52 +21,83 @@ export function ManoDeObra() {
     pu: "",
   });
 
+  const { errors, setFormInteraction } = useFormValidation(
+    formState,
+    validationsRuleForm
+  );
+
   const campos: Array<FieldsI> = [
     {
-      label: "Mano de Obra",
+      title: "Mano de Obra",
+      label: "name",
       value: formState.name,
-      onChangeText: (value: string) =>
-        setFormState({ ...formState, name: value }),
+      onChangeText: (value: string) => {
+        setFormState({ ...formState, name: value });
+        setFormInteraction({
+          isSubmitted: false,
+          isTouched: true,
+        });
+      },
     },
     {
-      label: "Cantidad",
+      title: "Cantidad",
+      label: "cant",
       value: formState.cant,
-      onChangeText: (value: string) =>
+      onChangeText: (value: string) => {
         setFormState({
           ...formState,
           cant: value,
-          pt: (parseFloat(value) * parseFloat(formState.pu || "0")).toString(),
-        }),
+          pt: calculatePt(value, formState.pu),
+        });
+        setFormInteraction({
+          isSubmitted: false,
+          isTouched: true,
+        });
+      },
       keyboardType: "numeric",
     },
 
     {
-      label: "Precio Unitario",
+      title: "Precio Unitario",
+      label: "pu",
       value: formState.pu,
-      onChangeText: (value: string) =>
+      onChangeText: (value: string) => {
         setFormState({
           ...formState,
           pu: value,
-          pt: (
-            parseFloat(value) * parseFloat(formState.cant || "0")
-          ).toString(),
-        }),
+          pt: calculatePt(value, formState.cant),
+        });
+        setFormInteraction({
+          isSubmitted: false,
+          isTouched: true,
+        });
+      },
       keyboardType: "numeric",
     },
     {
-      label: "Precio Total",
+      title: "Precio Total",
+      label: "pt",
       value: formState.pt,
       disabled: true,
     },
   ];
 
   const handleSubmit = () => {
-    const { name, pt, cant, pu, id } = formState;
+    setFormInteraction({
+      isSubmitted: true,
+      isTouched: false,
+    });
 
-    if (!name || !pt || !cant || !pu) {
-      Alert.alert("Error", "Por favor, completa todos los campos.");
+    const hasErrors =
+      errors && typeof errors === "object" && Object.keys(errors).length > 0;
+
+    setStepOption({ ...stepOption, isStepValid: hasErrors }), stepOption;
+
+    if (hasErrors) {
       return;
     }
+
+    const { name, pt, cant, pu, id } = formState;
 
     const nuevoRegistro = {
       id: Math.random().toString(),
@@ -72,6 +108,11 @@ export function ManoDeObra() {
     };
 
     addProduct("mano_obra", nuevoRegistro);
+
+    setFormInteraction({
+      isSubmitted: false,
+      isTouched: false,
+    });
 
     setFormState({
       id: "",
@@ -102,12 +143,17 @@ export function ManoDeObra() {
     );
   };
 
+  useEffect(() => {
+    setStepOption({ ...stepOption, isStepValid: true });
+  }, []);
+
   return (
     <View style={styles.container}>
       <FormularioGenerico
         title="MANO DE OBRA UNITARIA"
         campos={campos}
         onSubmit={handleSubmit}
+        errors={errors}
       />
       <FlatListField
         datos={productData.mano_obra as never}

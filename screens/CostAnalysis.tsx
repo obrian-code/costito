@@ -1,13 +1,15 @@
 import { useProduct } from "@/context/ProductContext";
+import { StepOptionConfigI } from "@/interface/Step";
 import { AntDesign } from "@expo/vector-icons";
 import { useSQLiteContext } from "expo-sqlite";
-
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-export function CostAnalysis() {
+export function CostAnalysis({ setStepOption, stepOption }: StepOptionConfigI) {
+  const [submitLocal, setSubmitLocal] = useState(false);
   const { productData } = useProduct();
 
-  const db = useSQLiteContext(); // ✅ Acceso a la base de datos
+  const db = useSQLiteContext();
 
   const calcularTotales = () => {
     const totalMateriaPrima = productData["materia_prima"].reduce(
@@ -27,13 +29,14 @@ export function CostAnalysis() {
       0
     );
 
+    const muCalculate = parseFloat(productData.Producto.margenUtilidad) / 100;
     const costoUnitario =
       totalMateriaPrima +
       totalCostosIndirectos +
       totalManoDeObra +
       totalGastosOperativos;
-    const margenUtilidad = costoUnitario * 0.2; // 20%
-    const igv = costoUnitario * 0.18; // 18%
+    const margenUtilidad = costoUnitario * muCalculate;
+    const igv = costoUnitario * parseFloat(productData.Producto.igv);
     const precioVenta = costoUnitario + margenUtilidad + igv;
 
     return {
@@ -44,6 +47,14 @@ export function CostAnalysis() {
     };
   };
   const totales = calcularTotales();
+
+  const handleSubmit = async () => {
+    const response = await insertarDatosEnDB();
+    if (response) {
+      setSubmitLocal(true);
+      setStepOption({ ...stepOption, submitEvent: true });
+    }
+  };
 
   const insertarDatosEnDB = async () => {
     try {
@@ -130,12 +141,20 @@ export function CostAnalysis() {
       await db.execAsync("COMMIT;");
 
       alert("Datos guardados correctamente.");
+      return true;
     } catch (error) {
       await db.execAsync("ROLLBACK;");
       console.error("Error al insertar datos:", error);
       alert("No se pudo guardar los datos.");
+      return false;
     }
   };
+
+  useEffect(() => {
+    if (stepOption.submitEvent && !submitLocal) {
+      insertarDatosEnDB();
+    }
+  }, [stepOption]);
 
   return (
     <View style={styles.container}>
@@ -147,10 +166,12 @@ export function CostAnalysis() {
         <View style={styles.resultContainer}>
           <Text style={styles.tableTitle}>Resultados:</Text>
           <Text>{`Costo Unitario: ${totales.costoUnitario.toFixed(2)}`}</Text>
-          <Text>{`Margen de Utilidad (20%): ${totales.margenUtilidad.toFixed(
-            2
-          )}`}</Text>
-          <Text>{`IGV (18%): ${totales.igv.toFixed(2)}`}</Text>
+          <Text>{`Margen de Utilidad (${
+            productData.Producto.margenUtilidad
+          }%): ${totales.margenUtilidad.toFixed(2)}`}</Text>
+          <Text>{`IGV (${
+            parseFloat(productData.Producto.igv) * 100
+          }%): ${totales.igv.toFixed(2)}`}</Text>
           <Text>{`Precio de Venta con IGV: ${totales.precioVenta.toFixed(
             2
           )}`}</Text>
@@ -158,7 +179,7 @@ export function CostAnalysis() {
 
         <TouchableOpacity
           style={styles.addContainer}
-          onPress={() => insertarDatosEnDB()}
+          onPress={() => handleSubmit()}
         >
           <AntDesign name="plus" style={styles.addText} />
         </TouchableOpacity>

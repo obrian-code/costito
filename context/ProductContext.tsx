@@ -10,6 +10,8 @@ interface MaterialI {
 interface ProductI {
   name: string;
   description: string;
+  margenUtilidad: string;
+  igv: string;
 }
 interface ProductData {
   Producto: ProductI;
@@ -41,6 +43,8 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({
     Producto: {
       name: "",
       description: "",
+      margenUtilidad: "20",
+      igv: "0.18",
     },
     materia_prima: [],
     packaging: [],

@@ -17,9 +17,7 @@ export const formatProductData = (rows: any[]): ProductDataI => {
       utilidad: 0,
     },
   };
-  console.log(rows[1]);
 
-  // Conjuntos para evitar duplicados
   const materiaPrimaIds = new Set();
   const packagingIds = new Set();
   const manoObraIds = new Set();
@@ -75,4 +73,11 @@ export const formatProductData = (rows: any[]): ProductDataI => {
   });
 
   return formattedData;
+};
+
+export const truncateText = (description: string, maxLength = 25) => {
+  if (description.length > maxLength) {
+    return description.substring(0, maxLength) + "...";
+  }
+  return description;
 };

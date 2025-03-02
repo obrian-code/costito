@@ -154,11 +154,22 @@ export default function InfoScreen() {
           </View>
 
           {/* Información General */}
-          <DataTable
-            title="Información General"
-            data={[productData?.producto]}
-            columns={["nombre", "descripcion", "precio"]}
-          />
+
+          <View style={styles.legendContainer}>
+            <Text style={styles.legendTitle}>Información General:</Text>
+            <Text style={styles.legendItem}>
+              <Text style={styles.boldText}>Nombre:</Text>{" "}
+              {productData?.producto.nombre}
+            </Text>
+            <Text style={styles.legendItem}>
+              <Text style={styles.boldText}>Descripcion:</Text>{" "}
+              {productData?.producto.descripcion}
+            </Text>
+            <Text style={styles.legendItem}>
+              <Text style={styles.boldText}>Precio:</Text>{" "}
+              {productData?.producto.precio.toFixed(2)}
+            </Text>
+          </View>
 
           {/* Detalles Adicionales */}
           <DataTable
@@ -182,12 +193,21 @@ export default function InfoScreen() {
             columns={["nombre", "pt", "cant", "pu"]}
           />
 
-          {/* Resumen */}
-          <DataTable
-            title="Resumen"
-            data={[productData?.cost_analysis]}
-            columns={["cu", "igv", "utilidad"]}
-          />
+          <View style={styles.legendContainer}>
+            <Text style={styles.legendTitle}>Resumen:</Text>
+            <Text style={styles.legendItem}>
+              <Text style={styles.boldText}>Utitlidad:</Text>
+              {productData?.cost_analysis.utilidad}
+            </Text>
+            <Text style={styles.legendItem}>
+              <Text style={styles.boldText}>IGV:</Text>
+              {productData?.cost_analysis.igv}
+            </Text>
+            <Text style={styles.legendItem}>
+              <Text style={styles.boldText}>Costo Unitario:</Text>
+              {productData?.cost_analysis.cu}
+            </Text>
+          </View>
         </ScrollView>
 
         <View style={styles.buttonContainer}>

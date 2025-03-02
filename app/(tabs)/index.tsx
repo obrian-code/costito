@@ -13,12 +13,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
-import * as FileSystem from "expo-file-system";
+import { truncateText } from "@/utils/formatData";
+
 export default function HomeScreen() {
   const [search, setSearch] = useState("");
 
   const db = useSQLiteContext();
-  const [version, setVersion] = useState("");
+
   const [products, setProducts] = useState<
     { id: number; nombre: string; descripcion: string; precio: number }[]
   >([]);
@@ -26,31 +27,7 @@ export default function HomeScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    async function setup() {
-      /*    console.log(
-        "Ruta de la base de datos:",
-        FileSystem.documentDirectory + "SQLite/test.db"
-      ); */
-
-      /*  await db.execAsync(`
-        PRAGMA foreign_keys = OFF;
-        DROP TABLE IF EXISTS Producto;
-        DROP TABLE IF EXISTS materia_prima;
-        DROP TABLE IF EXISTS packaging;
-        DROP TABLE IF EXISTS mano_obra;
-        DROP TABLE IF EXISTS gastos_operativos;
-        DROP TABLE IF EXISTS CostAnalysis;
-        PRAGMA foreign_keys = ON;
-      `); */
-      const result = await db.getFirstAsync<{ "sqlite_version()": string }>(
-        "SELECT sqlite_version()"
-      );
-      if (result) {
-        setVersion(result["sqlite_version()"]);
-      }
-      await fetchProducts();
-    }
-    setup();
+    fetchProducts();
   }, []);
 
   async function fetchProducts() {
@@ -81,7 +58,7 @@ export default function HomeScreen() {
     <GestureHandlerRootView>
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Costito/SQLite version: {version}</Text>
+          <Text style={styles.title}>Costito</Text>
         </View>
         <TouchableOpacity
           style={styles.button}
@@ -121,10 +98,10 @@ export default function HomeScreen() {
                 <View>
                   <Text style={styles.productName}>{product.nombre}</Text>
                   <Text style={styles.productDescription}>
-                    {product.descripcion}
+                    {truncateText(product.descripcion)}
                   </Text>
                   <Text style={styles.productPrice}>
-                    Precio: {product.precio}
+                    Precio: {product.precio.toFixed(2)}
                   </Text>
                 </View>
               </TouchableOpacity>

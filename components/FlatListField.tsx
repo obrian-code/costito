@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 
 interface Item {
@@ -23,72 +24,80 @@ export function FlatListField({ datos, handleEdit, handleDelete }: Props) {
 
   const toggleMenu = () => setToggle(!toggle);
   return (
-    <FlatList
-      data={datos}
-      keyExtractor={(item: Item) => (item as { id: string }).id}
-      renderItem={({ item }) => (
-        <View style={styles.record}>
-          <View style={styles.info}>
-            <Text>{`Nombre: ${item.name}`}</Text>
-            <Text>{`Cantidad: ${item.cant}`}</Text>
-            <Text>{`Precio Unitario: ${item.pu}`}</Text>
-            <Text>{`Precio Total: ${item.pt}`}</Text>
-          </View>
-          <TouchableOpacity style={styles.menu} onPress={() => toggleMenu()}>
-            <Entypo name="dots-two-vertical" size={24} color="black" />
-          </TouchableOpacity>
+    <ScrollView horizontal={true} style={styles.view}>
+      <FlatList
+        data={datos}
+        keyExtractor={(item: Item) => (item as { id: string }).id}
+        renderItem={({ item }) => (
+          <View style={styles.record}>
+            <View style={styles.info}>
+              <Text>{`Nombre: ${item.name}`}</Text>
+              <Text>{`Cantidad: ${item.cant}`}</Text>
+              <Text>{`Precio Unitario: ${item.pu}`}</Text>
+              <Text>{`Precio Total: ${item.pt}`}</Text>
+            </View>
+            <TouchableOpacity style={styles.menu} onPress={() => toggleMenu()}>
+              <Entypo name="dots-two-vertical" size={24} color="black" />
+            </TouchableOpacity>
 
-          <View
-            style={[
-              styles.buttonContainer,
-              {
-                display: toggle ? "flex" : "none",
-              },
-            ]}
-          >
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => handleEdit(item)}
+            <View
+              style={[
+                styles.buttonContainer,
+                {
+                  display: toggle ? "flex" : "none",
+                },
+              ]}
             >
-              <MaterialCommunityIcons
-                style={styles.buttonText}
-                name="circle-edit-outline"
-                size={18}
-                color="black"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={() => handleDelete((item as { id: string }).id)}
-            >
-              <AntDesign
-                style={styles.buttonText}
-                name="delete"
-                size={18}
-                color="black"
-              />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={() => handleEdit(item)}
+              >
+                <MaterialCommunityIcons
+                  style={styles.buttonText}
+                  name="circle-edit-outline"
+                  size={18}
+                  color="black"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => handleDelete((item as { id: string }).id)}
+              >
+                <AntDesign
+                  style={styles.buttonText}
+                  name="delete"
+                  size={18}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      )}
-      ListFooterComponent={<View style={{ height: 20 }} />}
-      contentContainerStyle={{ paddingBottom: 20 }}
-    />
+        )}
+        ListFooterComponent={<View style={{ height: 20 }} />}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  view: {
+    width: "100%",
+    /*     backgroundColor: "tomato", */
+    paddingHorizontal: 20,
+  },
   record: {
+    width: 270,
     padding: 10,
-    marginVertical: 5,
-    backgroundColor: "#f8f8f8",
+    marginVertical: 10,
+    backgroundColor: "#f9f9f9",
     borderRadius: 5,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    elevation: 5,
+    elevation: 10,
   },
   info: {
     width: "85%",

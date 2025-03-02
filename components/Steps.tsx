@@ -32,6 +32,8 @@ export function Steps({ steps }: StepsPropsI) {
     };
   }, []);
 
+  const currentStepOption = steps[currentStep].stepOption;
+
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
@@ -43,8 +45,6 @@ export function Steps({ steps }: StepsPropsI) {
       setCurrentStep(currentStep - 1);
     }
   };
-
-  const currentStepOption = steps[currentStep].stepOption;
 
   const handleSubmit = () => {
     steps[currentStep].setStepOption({

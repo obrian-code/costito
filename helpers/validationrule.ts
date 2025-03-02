@@ -1,6 +1,6 @@
 export const validationsRuleProducto = {
   producto: { required: true, minLength: 5 },
-  descripcion: { required: true, minLength: 5 },
+  descripcion: { required: true, minLength: 5, maxLength: 30 },
   margenUtilidad: { required: true, greaterThanZero: true },
 };
 export const validationsRuleForm = {

@@ -49,7 +49,7 @@ export function FormularioGenerico({
             />
           )}
 
-          {errors && campo.label && <ErrorList errors={errors[campo.label]} />}
+          {errors && campo?.label && <ErrorList errors={errors[campo.label]} />}
         </View>
       ))}
       <TouchableOpacity style={styles.Submit} onPress={onSubmit}>

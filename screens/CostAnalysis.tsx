@@ -46,6 +46,7 @@ export function CostAnalysis({ setStepOption, stepOption }: StepOptionConfigI) {
       precioVenta,
     };
   };
+
   const totales = calcularTotales();
 
   const handleSubmit = async () => {

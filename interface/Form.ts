@@ -11,4 +11,5 @@ export interface FormularioGenericoPropsI {
   campos: FieldsI[];
   onSubmit: () => void;
   errors?: ValidationErrorsI;
+  submitButton?: true;
 }

@@ -160,7 +160,7 @@ export function Producto({ setStepOption, stepOption }: StepOptionConfigI) {
     }
     setStepOption({ ...stepOption, isStepValid });
   }, []);
-  console.log(productData.Producto);
+
   return (
     <View style={styles.container}>
       <FormularioGenerico

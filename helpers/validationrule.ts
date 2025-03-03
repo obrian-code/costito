@@ -9,3 +9,9 @@ export const validationsRuleForm = {
   cant: { required: true, greaterThanZero: true },
   pu: { required: true, greaterThanZero: true },
 };
+
+export const validationsRuleSupport = {
+  email: { required: true, email: true },
+  asunto: { required: true, minLength: 5 },
+  mensaje: { required: true, minLength: 5 },
+};

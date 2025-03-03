@@ -16,6 +16,7 @@ export function FormularioGenerico({
   campos,
   onSubmit,
   errors,
+  submitButton,
 }: FormularioGenericoPropsI) {
   return (
     <View style={styles.formContainer}>
@@ -53,8 +54,10 @@ export function FormularioGenerico({
         </View>
       ))}
       <TouchableOpacity style={styles.Submit} onPress={onSubmit}>
-        <AntDesign name="plus" size={20} color="#25D360" />
-        <Text style={styles.SubmitText}>Agregar</Text>
+        {!submitButton && <AntDesign name="plus" size={20} color="#25D360" />}
+        <Text style={styles.SubmitText}>
+          {submitButton ? "Enviar" : "Agregar"}
+        </Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,13 +1,13 @@
-import { CostAnalysis } from "@/screens/CostAnalysis";
-import { ManoDeObra } from "@/screens/ManoDeObra";
-import { GastosOperativos } from "@/screens/GastosOperativos";
+import { CostAnalysis } from "@/components/form/screen/CostAnalysis";
+import { ManoDeObra } from "@/components/form/screen/ManoDeObra";
+import { GastosOperativos } from "@/components/form/screen/GastosOperativos";
 import { Steps } from "../../components/Steps";
-import { Packaging } from "@/screens/Packaging";
-import { MateriaPrima } from "@/screens/MateriaPrima";
+import { Packaging } from "@/components/form/screen/Packaging";
+import { MateriaPrima } from "@/components/form/screen/MateriaPrima";
 import { useState } from "react";
 import { Stack } from "expo-router";
 import { ProductProvider } from "@/context/ProductContext";
-import { Producto } from "@/screens/Producto";
+import { Producto } from "@/components/form/screen/Producto";
 import { View, ScrollView } from "react-native";
 
 export default function AddProductScreen() {

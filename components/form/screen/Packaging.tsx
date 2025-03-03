@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Alert } from "react-native";
-import { FieldsI } from "@/interface/Fields";
-import { FormularioGenerico } from "@/components/FormularioGenerico";
 import { FlatListField } from "@/components/FlatListField";
+import { FormularioGenerico } from "@/components/form/FormularioGenerico";
 import { useProduct } from "@/context/ProductContext";
+import { validationsRuleForm } from "@/helpers/validationrule";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import { FieldsI } from "@/interface/Fields";
+import { FormI } from "@/interface/Form";
 import { StepOptionConfigI } from "@/interface/Step";
 import { calculatePt } from "@/utils/calculatePt";
-import { FormI } from "@/interface/Form";
-import { useFormValidation } from "@/hooks/useFormValidation";
-import { validationsRuleForm } from "@/helpers/validationrule";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Alert } from "react-native";
 
-export function ManoDeObra({ setStepOption, stepOption }: StepOptionConfigI) {
+export function Packaging({ setStepOption, stepOption }: StepOptionConfigI) {
   const { productData, addProduct, deleteProduct } = useProduct();
 
   const [formState, setFormState] = useState<FormI>({
@@ -28,7 +28,7 @@ export function ManoDeObra({ setStepOption, stepOption }: StepOptionConfigI) {
 
   const campos: Array<FieldsI> = [
     {
-      title: "Mano de Obra",
+      title: "Packaging",
       label: "name",
       value: formState.name,
       onChangeText: (value: string) => {
@@ -56,7 +56,6 @@ export function ManoDeObra({ setStepOption, stepOption }: StepOptionConfigI) {
       },
       keyboardType: "numeric",
     },
-
     {
       title: "Precio Unitario",
       label: "pu",
@@ -97,17 +96,17 @@ export function ManoDeObra({ setStepOption, stepOption }: StepOptionConfigI) {
       return;
     }
 
-    const { name, pt, cant, pu, id } = formState;
+    const { name, pt, cant, pu } = formState;
 
     const nuevoRegistro = {
       id: Math.random().toString(),
-      name: name,
+      name,
       pt,
       cant,
       pu,
     };
 
-    addProduct("mano_obra", nuevoRegistro);
+    addProduct("packaging", nuevoRegistro);
 
     setFormInteraction({
       isSubmitted: false,
@@ -136,7 +135,7 @@ export function ManoDeObra({ setStepOption, stepOption }: StepOptionConfigI) {
         {
           text: "Eliminar",
           onPress: () => {
-            deleteProduct("mano_obra", id);
+            deleteProduct("packaging", id);
           },
         },
       ]
@@ -145,7 +144,7 @@ export function ManoDeObra({ setStepOption, stepOption }: StepOptionConfigI) {
 
   useEffect(() => {
     let isStepValid = true;
-    if (productData.mano_obra.length > 0) {
+    if (productData.packaging.length > 0) {
       isStepValid = false;
     }
     setStepOption({ ...stepOption, isStepValid });
@@ -154,13 +153,13 @@ export function ManoDeObra({ setStepOption, stepOption }: StepOptionConfigI) {
   return (
     <View style={styles.container}>
       <FormularioGenerico
-        title="MANO DE OBRA UNITARIA"
+        title="PACKAGING"
         campos={campos}
         onSubmit={handleSubmit}
         errors={errors}
       />
       <FlatListField
-        datos={productData.mano_obra as never}
+        datos={productData.packaging as never}
         handleEdit={handleEdit as never}
         handleDelete={handleDelete}
       />

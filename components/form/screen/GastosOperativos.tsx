@@ -1,16 +1,18 @@
-import { FormularioGenerico } from "@/components/FormularioGenerico";
-import { FieldsI } from "@/interface/Fields";
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
-import { FlatListField } from "../components/FlatListField";
+import { StyleSheet, View, Alert } from "react-native";
+import { FieldsI } from "@/interface/Fields";
+import { FormularioGenerico } from "@/components/form/FormularioGenerico";
 import { useProduct } from "@/context/ProductContext";
+import { FlatListField } from "@/components/FlatListField";
 import { StepOptionConfigI } from "@/interface/Step";
-import { calculatePt } from "@/utils/calculatePt";
 import { FormI } from "@/interface/Form";
-import { validationsRuleForm } from "@/helpers/validationrule";
 import { useFormValidation } from "@/hooks/useFormValidation";
+import { validationsRuleForm } from "@/helpers/validationrule";
 
-export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
+export function GastosOperativos({
+  setStepOption,
+  stepOption,
+}: StepOptionConfigI) {
   const { productData, addProduct, deleteProduct } = useProduct();
   const [formState, setFormState] = useState<FormI>({
     id: "",
@@ -27,7 +29,7 @@ export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
 
   const campos: Array<FieldsI> = [
     {
-      title: "Materia Prima",
+      title: "Gastos OP",
       label: "name",
       value: formState.name,
       onChangeText: (value: string) => {
@@ -38,6 +40,7 @@ export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
         });
       },
     },
+
     {
       title: "Cantidad",
       label: "cant",
@@ -46,7 +49,7 @@ export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
         setFormState({
           ...formState,
           cant: value,
-          pt: calculatePt(value, formState.pu),
+          pt: (parseFloat(value) * parseFloat(formState.pu || "0")).toString(),
         });
         setFormInteraction({
           isSubmitted: false,
@@ -63,7 +66,9 @@ export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
         setFormState({
           ...formState,
           pu: value,
-          pt: calculatePt(value, formState.cant),
+          pt: (
+            parseFloat(value) * parseFloat(formState.cant || "0")
+          ).toString(),
         });
         setFormInteraction({
           isSubmitted: false,
@@ -105,7 +110,7 @@ export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
       pu,
     };
 
-    addProduct("materia_prima", nuevoRegistro);
+    addProduct("gastos_operativos", nuevoRegistro);
 
     setFormInteraction({
       isSubmitted: false,
@@ -134,7 +139,7 @@ export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
         {
           text: "Eliminar",
           onPress: () => {
-            deleteProduct("materia_prima", id);
+            deleteProduct("gastos_operativos", id);
           },
         },
       ]
@@ -143,22 +148,22 @@ export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
 
   useEffect(() => {
     let isStepValid = true;
-    if (productData.materia_prima.length > 0) {
+    if (productData.gastos_operativos.length > 0) {
       isStepValid = false;
     }
     setStepOption({ ...stepOption, isStepValid });
   }, []);
-  console.log(stepOption);
+
   return (
     <View style={styles.container}>
       <FormularioGenerico
-        title="MATERIA PRIMA UNITARIA"
+        title="GASTOS OPERATIVOS UNITARIOS"
         campos={campos}
         onSubmit={handleSubmit}
         errors={errors}
       />
       <FlatListField
-        datos={productData.materia_prima as never}
+        datos={productData.gastos_operativos as never}
         handleEdit={handleEdit as never}
         handleDelete={handleDelete}
       />
@@ -171,5 +176,29 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: "flex-start",
+  },
+  record: {
+    marginVertical: 5,
+    padding: 10,
+    borderColor: "lightgray",
+    borderWidth: 1,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  editButton: {
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 5,
+  },
+  deleteButton: {
+    backgroundColor: "red",
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "#fff",
   },
 });

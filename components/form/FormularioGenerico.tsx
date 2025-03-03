@@ -8,7 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { ErrorList } from "./Error";
+import { ErrorList } from "../Error";
 import { FormularioGenericoPropsI } from "@/interface/Form";
 
 export function FormularioGenerico({

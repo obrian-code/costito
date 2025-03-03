@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Alert } from "react-native";
+import { FormularioGenerico } from "@/components/form/FormularioGenerico";
 import { FieldsI } from "@/interface/Fields";
-import { FormularioGenerico } from "@/components/FormularioGenerico";
+import React, { useEffect, useState } from "react";
+import { Alert, StyleSheet, View } from "react-native";
+import { FlatListField } from "../../FlatListField";
 import { useProduct } from "@/context/ProductContext";
-import { FlatListField } from "@/components/FlatListField";
 import { StepOptionConfigI } from "@/interface/Step";
+import { calculatePt } from "@/utils/calculatePt";
 import { FormI } from "@/interface/Form";
-import { useFormValidation } from "@/hooks/useFormValidation";
 import { validationsRuleForm } from "@/helpers/validationrule";
+import { useFormValidation } from "@/hooks/useFormValidation";
 
-export function GastosOperativos({
-  setStepOption,
-  stepOption,
-}: StepOptionConfigI) {
+export function MateriaPrima({ setStepOption, stepOption }: StepOptionConfigI) {
   const { productData, addProduct, deleteProduct } = useProduct();
   const [formState, setFormState] = useState<FormI>({
     id: "",
@@ -29,7 +27,7 @@ export function GastosOperativos({
 
   const campos: Array<FieldsI> = [
     {
-      title: "Gastos OP",
+      title: "Materia Prima",
       label: "name",
       value: formState.name,
       onChangeText: (value: string) => {
@@ -40,7 +38,6 @@ export function GastosOperativos({
         });
       },
     },
-
     {
       title: "Cantidad",
       label: "cant",
@@ -49,7 +46,7 @@ export function GastosOperativos({
         setFormState({
           ...formState,
           cant: value,
-          pt: (parseFloat(value) * parseFloat(formState.pu || "0")).toString(),
+          pt: calculatePt(value, formState.pu),
         });
         setFormInteraction({
           isSubmitted: false,
@@ -66,9 +63,7 @@ export function GastosOperativos({
         setFormState({
           ...formState,
           pu: value,
-          pt: (
-            parseFloat(value) * parseFloat(formState.cant || "0")
-          ).toString(),
+          pt: calculatePt(value, formState.cant),
         });
         setFormInteraction({
           isSubmitted: false,
@@ -110,7 +105,7 @@ export function GastosOperativos({
       pu,
     };
 
-    addProduct("gastos_operativos", nuevoRegistro);
+    addProduct("materia_prima", nuevoRegistro);
 
     setFormInteraction({
       isSubmitted: false,
@@ -139,7 +134,7 @@ export function GastosOperativos({
         {
           text: "Eliminar",
           onPress: () => {
-            deleteProduct("gastos_operativos", id);
+            deleteProduct("materia_prima", id);
           },
         },
       ]
@@ -148,22 +143,22 @@ export function GastosOperativos({
 
   useEffect(() => {
     let isStepValid = true;
-    if (productData.gastos_operativos.length > 0) {
+    if (productData.materia_prima.length > 0) {
       isStepValid = false;
     }
     setStepOption({ ...stepOption, isStepValid });
   }, []);
-
+  console.log(stepOption);
   return (
     <View style={styles.container}>
       <FormularioGenerico
-        title="GASTOS OPERATIVOS UNITARIOS"
+        title="MATERIA PRIMA UNITARIA"
         campos={campos}
         onSubmit={handleSubmit}
         errors={errors}
       />
       <FlatListField
-        datos={productData.gastos_operativos as never}
+        datos={productData.materia_prima as never}
         handleEdit={handleEdit as never}
         handleDelete={handleDelete}
       />
@@ -176,29 +171,5 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: "flex-start",
-  },
-  record: {
-    marginVertical: 5,
-    padding: 10,
-    borderColor: "lightgray",
-    borderWidth: 1,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
-  },
-  editButton: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    borderRadius: 5,
-  },
-  deleteButton: {
-    backgroundColor: "red",
-    padding: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "#fff",
   },
 });

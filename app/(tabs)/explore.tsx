@@ -1,4 +1,4 @@
-import { FormularioGenerico } from "@/components/FormularioGenerico";
+import { FormularioGenerico } from "@/components/form/FormularioGenerico";
 import { validationsRuleSupport } from "@/helpers/validationrule";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { FieldsI } from "@/interface/Fields";

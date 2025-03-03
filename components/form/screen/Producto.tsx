@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Alert, Text } from "react-native";
-import { FormularioGenerico } from "@/components/FormularioGenerico";
+import { FormularioGenerico } from "@/components/form/FormularioGenerico";
 import { FieldsI } from "@/interface/Fields";
 import { useProduct } from "@/context/ProductContext";
 import { StepOptionConfigI } from "@/interface/Step";
@@ -81,17 +81,22 @@ export function Producto({ setStepOption, stepOption }: StepOptionConfigI) {
       isSubmitted: true,
       isTouched: false,
     });
-
     if (productData.Producto.name.length > 0) {
       Alert.alert("Error", "Ya existe un producto registrado.");
       return;
     }
+
     const hasErrors =
       errors && typeof errors === "object" && Object.keys(errors).length > 0;
 
     setStepOption({ ...stepOption, isStepValid: hasErrors });
 
     if (hasErrors) {
+      return;
+    }
+
+    if (!data.producto || !data.descripcion) {
+      setStepOption({ ...stepOption, isStepValid: true });
       return;
     }
 

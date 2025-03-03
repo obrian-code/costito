@@ -34,7 +34,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DefaultTheme}>
       <SQLiteProvider databaseName="costos.db" onInit={migrateDbIfNeeded}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

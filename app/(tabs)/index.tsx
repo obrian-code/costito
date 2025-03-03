@@ -1,8 +1,5 @@
 import {
-  GestureHandlerRootView,
   ScrollView,
-} from "react-native-gesture-handler";
-import {
   View,
   Text,
   TouchableOpacity,
@@ -55,7 +52,7 @@ export default function HomeScreen() {
   );
 
   return (
-    <GestureHandlerRootView>
+    <>
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Costito</Text>
@@ -115,7 +112,7 @@ export default function HomeScreen() {
           <Ionicons name="add" size={30} color="white" />
         </TouchableOpacity>
       </View>
-    </GestureHandlerRootView>
+    </>
   );
 }
 

@@ -13,3 +13,7 @@ export interface FormularioGenericoPropsI {
   errors?: ValidationErrorsI;
   submitButton?: true;
 }
+
+export interface FormDataContactI {
+  [x: string]: string;
+}

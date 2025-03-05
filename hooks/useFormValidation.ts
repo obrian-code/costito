@@ -95,5 +95,5 @@ export function useFormValidation(
     validate();
   }, [formValues]);
 
-  return { errors, setFormInteraction };
+  return { errors, setFormInteraction, formInteraction };
 }

@@ -1,0 +1,21 @@
+* [33mc3c7f3b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m fix:boton finalizar , al guardar los datos
+* [33mf5bbb54[m[33m ([m[1;31morigin/main[m[33m)[m file:rm dolki.png
+* [33m6181463[m fix:formulario producto validacion
+* [33m1b51a2d[m feat:pagina de contacto
+* [33m6b28ca6[m feat:modo ligth permante
+* [33mc2afb8e[m refactor:page ID
+* [33m6361a20[m fix:spetprev habilitado
+* [33m06d1c0d[m fix:flatlist scroll, trucante texto de la descripcion del producto
+* [33m2771989[m validaciones
+* [33m7d35a0f[m fix:index cargue los datos cada vez que se vuelve a esa pantalla
+* [33m2bb683c[m fix:insertar los datas en sus repectivas tablas , cambiar el eliminar
+* [33m8bb2df0[m feat:conexion a la base de datos, consumir de la db, exportar excel compartido
+* [33me85e517[m feat:contex para los formulario de registo del producto
+* [33mad00339[m fix:cambiar los colores del tabs del home
+* [33m7bbd90f[m feat:nuevas pantallas
+* [33m1d2c4fa[m fix:personalizacion de boton enviar , atras y siguiente de steps
+* [33m560e1b6[m fix:añadir filtro de busqueda con funcionalidad
+* [33m8cd0e95[m feat:cambio de pantalla de inicio
+* [33m5f97acc[m feat:ventana para mostrar los datos que ya obtuvieron  su calculo
+* [33me5a1ab2[m first commit
+* [33m844ce1c[m Initial commit
